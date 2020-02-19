@@ -1,5 +1,8 @@
 ---
 layout: default
-title: Vijay Lulla
+title: Vijay Lulla's homepage
 ---
-Hello world!
+- [Page related to R](/r_page)
+- [Guidelines for effective computing](/effective_computing)
+- [Useful links](/links)
+- [Miscellaneous stuff](/misc)
