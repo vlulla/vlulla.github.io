@@ -2,21 +2,15 @@
 <html>
 <head>
   <title>{{ page.title }}</title>
-  <!-- link to main stylesheet -->
   <link rel="stylesheet" type="text/css" href="/css/main.css">
 </head>
 <body>
-  <nav>
-      <a href="/">Home</a> | <a href="/about">About</a> | <a href="/cv">CV</a> | <a href="/blog">Blog</a>
-  </nav>
-  <div class="container">
-    {{ content }}
-  </div> <!-- container -->
-  <footer>
-    <ul>
-      <li><a href="https://github.com/vlulla">github.com/vlulla</a></li>
-    </ul>
-  </footer>
+{% include navigation.html %}
+{% include header.html %}
+<div class="container">
+  {{ content }}
+</div>
+{% include footer.html %}
 </body>
 </html>
 
