@@ -1053,4 +1053,41 @@ Some miscellaneous notes about R.
 
  92. R's type hierarchy:
        NULL < raw < logical < integer < double < complex < character < list < expression
+ 93. Here are a couple of very useful frequency functions! I got this idea from 
+     https://st2.ning.com/topology/rest/1.0/file/get/4077505910?profile=original
+     ## I have it organized how I think it will be beneficial to me...
+
+        freqsdt <- function(DT, groupcols, percent=TRUE) {
+            stopifnot(is.data.table(DT), is.character(groupcols) & length(groupcols) > 0L)
+            res <- DT[, .(frequency=.N), by=groupcols][order(-frequency)][,percentage:=100*frequency/sum(frequency)]
+            res
+            outcols <- colnames(res)
+            if(!isTRUE(percent)) outcols <- setdiff(outcols, "percentage")
+            res[, ..outcols]
+        }
+
+        allfreqs <- function(DT, catlim=100L) {
+            stopifnot(is.data.table(DT), is.integer(catlim) & catlim > 0L)
+            nms <- names(DT)
+            nmlen <- length(nms)
+            final <- data.table(NULL)
+            for(i in seq_len(nmlen)) {
+                freqs <- freqsdt(DT, c(nms[i]))
+                if(nrow(freqs) <= catlim) {
+                    final <- rbind(final, 
+                                   data.table(vname=nms[i],value=as.factor(freqs[[1]]),
+                                              frequency=freqs[[2]], percent=freqs[[3]]))
+                }
+            }
+            final
+        } 
+
+     And you use them like so:
+       R> d <- data.table(grp=sample(c('a','b','c'),1000,replace=T),grp1=sample(1:2,1000,replace=T),x=runif(1000),y=runif(1000),z=runif(1000))
+       R> freqsdt(d, c("grp"))
+       R> freqsdt(d, c("grp1"))
+       R> freqsdt(d, c("grp", "grp1"))
+       R> freqsdt(d, c("grp1", "grp"))
+       R> allfreqs(d) ## Probably should be called first!! Before anything else...
+
 
