@@ -413,8 +413,8 @@ Some miscellaneous notes about R.
       '"POSIXct"' to character vectors.  'strptime' converts character vectors
       to clas '"POSIXlt"'.  See ?format or ?strftime .
 
-      Mnemonic:  strptime  <==> parse time   i.e. character -> date/time class
-                 strftime  <==> format time  i.e. date/time -> character
+      Mnemonic:  strptime  <==> string parse time  i.e. character -> date/time class
+                 strftime  <==> string format time  i.e. date/time -> character
 
   38. If you use both the 'reshape2' and 'data.table' packages you'll have to
     load reshape2 first and then data.table See ?data.table:::melt or
@@ -534,7 +534,7 @@ Some miscellaneous notes about R.
      Also, for `strsplit` if the sep is not a regex, using fixed=TRUE makes
      `strsplit` considerably faster!
 
- 48. Remove leading/trailing spaces with `trimws` (package="base").
+ 48. Remove leading/trailing spaces with `base::trimws`.
 
  49. You can use zApply or stackApply to group bunch of layers (say based on
      month or year) in a rasterstack/rasterbrick.  Just be aware that `stackApply`
@@ -1053,6 +1053,7 @@ Some miscellaneous notes about R.
 
  92. R's type hierarchy:
        NULL < raw < logical < integer < double < complex < character < list < expression
+
  93. Here are a couple of very useful frequency functions! I got this idea from 
      https://st2.ning.com/topology/rest/1.0/file/get/4077505910?profile=original
      ## I have it organized how I think it will be beneficial to me...
