@@ -1,5 +1,6 @@
 ---
 title: Some miscellaneous notes about R.
+layout: default
 ---
 
   1. rJava needs jvm.dll to work properly. Since it is not in the path, add it
