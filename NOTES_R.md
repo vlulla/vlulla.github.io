@@ -1259,3 +1259,24 @@ layout: default
     R> freqsdt(d, c("grp1", "grp"))
     R> allfreqs(d) ## Probably should be called first!! Before anything else...
     ```
+
+94. Get all the different S3methods of a function
+    ```r
+    getAllS3methods <- function(func) {
+        ## I was looking at ?sf::`st_cast` and wanted to see all the different st_cast methods for different geometry types.
+        ## This is how to go about it.
+        ##
+        ##  R> library("sf"); ?st_cast
+        ##  R> getAllS3methods("st_cast")
+        ##  R> str(getAllS3methods("st_cast")
+        ##
+        ##  This is very helpful for geospatial packages!
+        ##
+        stopifnot(is.character(func), length(func) == 1L)
+        m <- methods(func)
+        ms <- gsub("\\*$", "", as.character(m))
+        s3methods <- sapply(ms, function(x) c(strsplit(x,"\\."))) ## each item is a two character vector c("function" "class")!
+        funcdefs <- lapply(s3methods, function(x) do.call(getS3method, as.list(x)))
+        funcdefs
+    }
+    ```
