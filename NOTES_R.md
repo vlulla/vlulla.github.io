@@ -1276,7 +1276,16 @@ layout: default
         m <- methods(func)
         ms <- gsub("\\*$", "", as.character(m))
         s3methods <- sapply(ms, function(x) c(strsplit(x,"\\."))) ## each item is a two character vector c("function" "class")!
-        funcdefs <- lapply(s3methods, function(x) do.call(getS3method, as.list(x)))
+
+        ##
+        ## To see the issue with s3methods do the following:
+        ##
+        ## table(sapply(s3methods, length))
+        ## s3methods[which(sapply(s3methods, length) > 2]
+
+        fixed_s3methods <- lapply(s3methods, function(x) c(x[[1]], paste(x[2:length(x)], collapse="."))) ## methods like print.data.table and print.boostrap.lca
+
+        funcdefs <- lapply(fixed_s3methods, function(x) do.call(getS3method, as.list(x)))
         funcdefs
     }
     ```
