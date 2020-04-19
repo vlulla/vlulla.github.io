@@ -661,30 +661,31 @@ layout: default
 
 55. Some solutions for programming pitfalls:
     Easy solutions:
-      a. Input only required data
-         ```r
-         R> colClasses <- c("NULL","integer","NULL","numeric")
-         R> d <- read.table("myfile",colClasses=colClasses)
-         ```
-      b. Preallocate-and-fill, not copy-and-append (*** MOST IMPORTANT ***)
-         ```r
-         R> res <- numeric(nrow(df))
-         R> for(i in seq_len(nrow(df)))
-         +    res[[i]] <- some_calc(df[i,])
-         ```
-      c. Vectorized calculations, not iteration
-         ```r
-         R> x <- runif(100000); x2 <- x^2
-         R> m <- matrix(x2,nrow=1000);y <- rowSums(m)
-         ```
-      d. Avoid unnecessary character creation operations e.g.
-         `USE.NAMES=FALSE` in `sapply`, `use.names=FALSE` in `unlist`.
+
+    a. Input only required data
+       ```r
+       R> colClasses <- c("NULL","integer","NULL","numeric")
+       R> d <- read.table("myfile",colClasses=colClasses)
+       ```
+    b. Preallocate-and-fill, not copy-and-append (*** MOST IMPORTANT ***)
+       ```r
+       R> res <- numeric(nrow(df))
+       R> for(i in seq_len(nrow(df)))
+       +    res[[i]] <- some_calc(df[i,])
+       ```
+    c. Vectorized calculations, not iteration
+       ```r
+       R> x <- runif(100000); x2 <- x^2
+       R> m <- matrix(x2,nrow=1000);y <- rowSums(m)
+       ```
+    d. Avoid unnecessary character creation operations e.g.
+       `USE.NAMES=FALSE` in `sapply`, `use.names=FALSE` in `unlist`.
 
     Moderate solutions:
-      a. Use appropriate functions, often from specialized packages
-      b. Identify appropriate algorithms, e.g. %in% is O(N) whereas
-         naive might be O(N^2)
-      c. Use C or Fortran code.
+    a. Use appropriate functions, often from specialized packages
+    b. Identify appropriate algorithms, e.g. %in% is O(N) whereas
+       naive might be O(N^2)
+    c. Use C or Fortran code.
 
 56. NOTE: Assigning to columns might copy whole data.frame!  This is why
           data.frames are slow.  Look at the example mentioned in section 3.3.3
