@@ -1293,18 +1293,25 @@ layout: default
 95. Generate a random filename.
     ```r
     generate_random_filename <- genrandfilename <-
-       function(minlen=5L,maxlen=20L,filechars=paste0(c(letters,LETTERS,0:9),collapse=""),
-                extensions=c("pdf","exe","txt","md","xls","doc","xlsx","dat","csv","shp","prj"),
-                allowspaces=FALSE) {
-         stopifnot(is.integer(minlen), is.integer(maxlen), minlen > 0L, maxlen > 0L, maxlen >= minlen)
-         if(isTRUE(allowspaces)) filechars <- paste0(filechars," ")
-         len <- sample(seq.int(minlen,maxlen), 1)
-         filechars <- unlist(strsplit(filechars,""))
-         ## browser()
-         filename <- paste0(sample(filechars, len, replace=T), collapse="") ## len can be larger than length of filechars
-         ext <- sample(extensions, 1)
-         filename <- sprintf("%s.%s", filename, ext)
-         filename
+      function(minlen=5L,maxlen=20L,filechars=paste0(c(letters,LETTERS,0:9),collapse=""),
+               extensions=c("pdf","exe","txt","md","xls","doc","xlsx","dat","csv","shp","prj"),
+               allowspaces=FALSE) {
+        stopifnot(is.integer(minlen), is.integer(maxlen), minlen > 0L, maxlen > 0L, maxlen >= minlen)
+        require("data.table")
+        len <- sample(seq.int(minlen,maxlen), 1)
+        filechars <- unlist(strsplit(filechars,""))
+        ## browser()
+        char_prob_tbl <- data.table(char=filechars,prob=1/lenth(filechars))
+        if(isTRUE(allowspaces)) {
+            ## When spaces are allowed, modify the probability in such a way that space is selected twice as often as other chars
+            char_prob_tbl <- rbind(char_prob_tbl, list(" ", 2/(length(filechars)+1)))
+            ## char_prob_tbl[char != " ", prob:=(1-char_prob_tbl[char==' ', prob])/char_prob_tbl[char != ' ', .N]]
+            char_prob_tbl[char != " ", prob:=(1 - .SD[char==' ', prob])/ .SD[char != ' ', .N]]
+        }
+        filename <- paste0(sample(filechars, len, replace=T), collapse="") ## len can be larger than length of filechars
+        ext <- sample(extensions, 1)
+        filename <- sprintf("%s.%s", filename, ext)
+        filename
       }
     ```
 
