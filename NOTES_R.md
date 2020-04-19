@@ -1289,3 +1289,27 @@ layout: default
         funcdefs
     }
     ```
+
+95. Generate a random filename.
+    ```r
+    generate_random_filename <- genrandfilename <-
+       function(minlen=5L,maxlen=20L,filechars=paste0(c(letters,LETTERS,0:9),collapse=""),
+                extensions=c("pdf","exe","txt","md","xls","doc","xlsx","dat","csv","shp","prj"),
+                allowspaces=FALSE) {
+         stopifnot(is.integer(minlen), is.integer(maxlen), minlen > 0L, maxlen > 0L, maxlen >= minlen)
+         if(isTRUE(allowspaces)) filechars <- paste0(filechars," ")
+         len <- sample(seq.int(minlen,maxlen), 1)
+         filechars <- unlist(strsplit(filechars,""))
+         ## browser()
+         filename <- paste0(sample(filechars, len, replace=T), collapse="") ## len can be larger than length of filechars
+         ext <- sample(extensions, 1)
+         filename <- sprintf("%s.%s", filename, ext)
+         filename
+      }
+    ```
+
+    And you use them like so:
+    ```r
+    R> genrandfilename()
+    R> files <- replicate(15, generate_random_filename())
+    ```
