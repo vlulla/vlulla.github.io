@@ -682,6 +682,7 @@ layout: default
        `USE.NAMES=FALSE` in `sapply`, `use.names=FALSE` in `unlist`.
 
     Moderate solutions:
+
     a. Use appropriate functions, often from specialized packages
     b. Identify appropriate algorithms, e.g. %in% is O(N) whereas
        naive might be O(N^2)
