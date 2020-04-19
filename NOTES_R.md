@@ -684,8 +684,10 @@ layout: default
     Moderate solutions:
 
     a. Use appropriate functions, often from specialized packages
+
     b. Identify appropriate algorithms, e.g. %in% is O(N) whereas
-       naive might be O(N^2)
+       naive might be O(N^2^)
+
     c. Use C or Fortran code.
 
 56. NOTE: Assigning to columns might copy whole data.frame!  This is why
