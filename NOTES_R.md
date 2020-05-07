@@ -288,7 +288,7 @@ layout: default
  23. Use the package "gdata" instead of "xlsx"!
 
  24. Be aware of types.  R can waste space if you aren't careful.  Consider:
-     
+
      ```r
      R> a <- 1:1000000
      R> b <- 1:1000000
@@ -399,7 +399,7 @@ layout: default
             objects <- sapply(object.names, get, pkg)
             objects[sapply(objects, is.function)]
           }
-      
+
           functions <- package.functions(package)
           func_length <- vapply(functions, function.length, 0L)
           data.table(func=sprintf("%s::`%s`", package, names(functions)), length=func_length)
@@ -1296,24 +1296,25 @@ layout: default
 
 95. Generate a random filename.
     ```r
-    generate_random_filename <- genrandfilename <-
-      function(minlen=5L,maxlen=20L,filechars=paste0(c(letters,LETTERS,0:9),collapse=""),
-               extensions=c("pdf","exe","txt","md","xls","doc","xlsx","dat","csv","shp","prj"),
-               allowspaces=FALSE) {
+    generate_random_filename <- genrandfilename <- 
+      function(minlen=5L,maxlen=20L,filechars=paste0(c(letters,LETTERS,0:9),collapse=""),extensions=c("pdf","exe","txt","md","xls","doc","xlsx","dat","csv","shp","prj"),allowspaces=FALSE) {
         stopifnot(is.integer(minlen), is.integer(maxlen), minlen > 0L, maxlen > 0L, maxlen >= minlen)
+        stopifnot(isTRUE(allowspaces) || isFALSE(allowspaces), is.character(filechars), is.character(extensions))
         require("data.table")
         len <- sample(seq.int(minlen,maxlen), 1)
         filechars <- unlist(strsplit(filechars,""))
         ## browser()
-        char_prob_tbl <- data.table(char=filechars,prob=1/lenth(filechars))
+        char_prob_tbl <- data.table(char=filechars,prob=1/length(filechars))
         if(isTRUE(allowspaces)) {
             ## When spaces are allowed, modify the probability in such a way that space is selected twice as often as other chars
             char_prob_tbl <- rbind(char_prob_tbl, list(" ", 2/(length(filechars)+1)))
-            ## char_prob_tbl[char != " ", prob:=(1-char_prob_tbl[char==' ', prob])/char_prob_tbl[char != ' ', .N]]
-            char_prob_tbl[char != " ", prob:=(1 - .SD[char==' ', prob])/ .SD[char != ' ', .N]]
+            char_prob_tbl[char != " ", prob:=(1-char_prob_tbl[char==' ', prob])/ .N]
+            ## char_prob_tbl[char != " ", prob:=(1 - .SD[char==' ', prob])/ .SD[char != ' ', .N]]
+            stopifnot(char_prob_tbl[, sum(prob)] == 1L)
         }
-        filename <- paste0(sample(filechars, len, replace=T), collapse="") ## len can be larger than length of filechars
-        ext <- sample(extensions, 1)
+        ## filename <- paste0(sample(filechars, len, replace=T), collapse="") ## len can be larger than length of filechars
+        filename <- paste0(sample(char_prob_tbl$char, len, prob=char_prob_tbl$prob, replace=T), collapse="") ## len can be larger than length of filechars
+        ext <- sample(extensions, 1L, replace=TRUE)
         filename <- sprintf("%s.%s", filename, ext)
         filename
       }
