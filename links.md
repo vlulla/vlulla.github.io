@@ -19,7 +19,7 @@ title: "Miscellaneous"
 - [Probability and statistics EBook](http://wiki.stat.ucla.edu/socr/index.php/EBook) (by UCLA statistics department)
 - [Think Bayes](https://greenteapress.com/wp/think-bayes/) by Allen B. Downey
 - <https://www.spatialanalysisonline.com/> -- Geospatial Analysis book online
-- [My page with R related links](/r_page)
+- [My page with R related links](/r_page) -- Also contains a file with functions I have accumulated over the years.
 
 ### Data
 1. <http://census.ire.org/> -- Easy way to access/download 2000 and 2010 Census data.

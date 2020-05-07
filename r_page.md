@@ -18,6 +18,7 @@ some of the links that I find useful.
 - [Geographic Data Analysis Using R](http://geog.uoregon.edu/geogr/)
 - [How R Searches and Finds Stuff](http://obeautifulcode.com/R/How-R-Searches-And-Finds-Stuff/) -- very useful!!
 - [My R related notes](NOTES_R.md)
+- [My R related utils developed over the years](vl_utils.R)
 
 ## R Intro (pdfs)
 
