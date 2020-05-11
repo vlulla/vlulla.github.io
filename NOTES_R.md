@@ -1229,7 +1229,7 @@ layout: default
     ```r
     ## I have it organized how I think it will be beneficial to me...
     freqsdt <- function(DT, groupcols, percent=TRUE) {
-        stopifnot(is.data.table(DT), is.character(groupcols) & length(groupcols) > 0L)
+        stopifnot(is.data.table(DT), is.character(groupcols) & length(groupcols) > 0L, all(groupcols %chin% colnames(DT)))
         res <- DT[, .(frequency=.N), by=groupcols][order(-frequency)][,percentage:=100*frequency/sum(frequency)]
         res
         outcols <- colnames(res)

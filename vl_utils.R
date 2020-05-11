@@ -370,7 +370,7 @@ freqsdt <- freqsDT <- function(DT, groupcols, percent=TRUE) {
   ## R> allfreqs(i)
   ## R> freqsdt(i, c("Species"))
 
-  stopifnot(is.data.table(DT), is.character(groupcols) & length(groupcols) > 0L)
+  stopifnot(is.data.table(DT), is.character(groupcols) & length(groupcols) > 0L, all(groupcols %chin% colnames(DT))
   res <- DT[, .(frequency=.N), by=groupcols][order(-frequency)][,percentage:=100*frequency/sum(frequency)]
   res ## To force it...???
   outcols <- colnames(res)
@@ -381,6 +381,14 @@ freqsdt <- freqsDT <- function(DT, groupcols, percent=TRUE) {
 ## Also from https://st2.ning.com/topology/rest/1.0/file/get/4077505910?profile=original
 allfreqs <- function(DT, catlim=100L) {
   stopifnot(is.data.table(DT), is.integer(catlim) & catlim > 0L)
+  if(NROW(DT) > 1e6) { 
+    cat("####################################################\n")
+    cat("The datatable contains more than 1 million rows     \n")
+    cat("  and this function crashes R easily...so subsetting\n")
+    cat("  datatable to only the first million rows...       \n")
+    cat("####################################################\n\n\n")
+    DT <- DT[1:1e6, ]
+  }
   names <- names(DT)
   namelen <- length(names)
   final <- data.table(NULL)
