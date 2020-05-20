@@ -10,9 +10,9 @@
 ## ### -- end copy
 ##
 ## Trying to insure that your interactive/session environment is *NOT* clobbered!
-## 
-## Some of the more useful functions (in order of my daily usage) in here are: 
-##   lsos, toggleError, ispkginstalled, theme_vl, allfreqs, freqsdt, 
+##
+## Some of the more useful functions (in order of my daily usage) in here are:
+##   lsos, toggleError, ispkginstalled, theme_vl, allfreqs, freqsdt,
 ##   run_examples_from_package, getAllS3methods, symdiff
 ##   genrandstr, genrandfilename
 ##
@@ -61,6 +61,7 @@ cov.pop <- function(x, y=NULL, ...) { cov(x, y, ...) * (NROW(x)-1)/NROW(x) }
 var.pop <- function(x, ...) { var(x, ...) * (NROW(x)-1)/NROW(x) }
 sd.pop <- function(x, na.rm=FALSE) { sqrt(var.pop(x, na.rm=na.rm)) }
 rmse <- RMSE <- function(residuals) sqrt(mean(residuals))
+normalize <- function(x) { (x - min(x)) / (max(x) - min(x)) }
 
 fixcolnames <- normalize_string <- function(x, lowercase=FALSE) {
 
@@ -200,7 +201,7 @@ st_queen <- function(a, b=a) sf::st_relate(a, b, pattern="F***T****")
 
 lsos <- lsobjs <- .ls.objects  <- function(pos=1L, pattern, order.by, decreasing=FALSE, head=FALSE, n=5) {
 
-  ## 
+  ##
   ## See http://stackoverflow.com/questions/1358003/tricks-to-manage-the-available-memory-in-an-r-session
   ##
   ## Modified to sort correctly based on size! There's a subtle bug in the SO answer
@@ -248,7 +249,7 @@ lsos <- lsobjs <- .ls.objects  <- function(pos=1L, pattern, order.by, decreasing
 ## Column Details for a Data Frame
 ## ^^^    ^^^^^^^       ^    ^
 colDetails <- function(DF) {
-  stopifnot(inherits(DF, "data.frame"))
+  stopifnot("Needs a data.frame or data.table" = inherits(DF, "data.frame"))
   colnames <- colnames(DF)
   colclasses <- sapply(DF, classes)
   colidx <- seq_along(DF)
@@ -261,11 +262,11 @@ issorted <- function(x) all(order(x) == seq_along(x))
 #### list_functions_at_pos <- function(pos, all.names=FALSE) {
 ####   package.functions(search()[pos], all.names=all.names)
 #### }
-#### 
+####
 #### list_functionargs_at_pos <- function(pos=-1L, all.names=FALSE) {
 ####   funcs <- list_functions_at_pos(pos, all.names=all.names)
 ####   lapply(funcs, args)
-#### 
+####
 #### }
 #### ## All of this hassle for what??  Just use lsf.str(pos)!!!!  # ?`utils::lsf.str`
 #### ## Or better yet ls.str(pos, mode="function")
@@ -295,10 +296,10 @@ run_examples_from_package <- function(pkgname, local=TRUE) {
   ##
   ## This will create two files in `getcwd()`. The output of plotting commands
   ## are in <pkgname>_examples.pdf and the output/message text are in
-  ## <pkgname>_example_messages.txt files! 
+  ## <pkgname>_example_messages.txt files!
   ##
-  ## The function tries to be careful not to overwrite files if they're 
-  ## already present. Best to run this in an empty directory... 
+  ## The function tries to be careful not to overwrite files if they're
+  ## already present. Best to run this in an empty directory...
   ## also helps if some examples create some other files.....
 
   qual_pkg <- if(startsWith(pkgname, "package:")) {
@@ -313,8 +314,8 @@ run_examples_from_package <- function(pkgname, local=TRUE) {
   }
   pdfout <- sprintf("%s_examples.pdf", bare_pkg)
   msgout <- sprintf("%s_examples_message.txt", bare_pkg)
-  stopifnot(!file.exists(pdfout))
-  stopifnot(!file.exists(msgout))
+  stopifnot("Would overwrite existing files!" = !file.exists(pdfout))
+  stopifnot("Would overwrite existing files!" = !file.exists(msgout))
 
   pdf(pdfout); on.exit(dev.off(), add=TRUE)
   msg <- file(msgout, open="wt")
@@ -331,7 +332,7 @@ poisson_binomial <- function(theta) {
   ##
   ## See http://discourse.mc-stan.org/t/poisson-binomial-distribution-any-existing-stan-implementation/4220/5
   ##
-  
+
   N <- length(theta)
   if (N == 0) return(c(1));
   alpha <- matrix(-Inf, N + 1, N + 1);
@@ -342,7 +343,7 @@ poisson_binomial <- function(theta) {
 
     if (n > 1) {
       for (tot in 1:(n - 1)) {
-        alpha[n + 1, tot + 1] = 
+        alpha[n + 1, tot + 1] =
             alpha[n, tot] * theta[n] + alpha[n, tot  + 1] * (1 - theta[n]);
       }
     }
@@ -370,7 +371,8 @@ freqsdt <- freqsDT <- function(DT, groupcols, percent=TRUE) {
   ## R> allfreqs(i)
   ## R> freqsdt(i, c("Species"))
 
-  stopifnot(is.data.table(DT), is.character(groupcols) & length(groupcols) > 0L, all(groupcols %chin% colnames(DT))
+  stopifnot("needs a data.table" = is.data.table(DT),
+            "column names not provided" = is.character(groupcols) & length(groupcols) > 0L)
   res <- DT[, .(frequency=.N), by=groupcols][order(-frequency)][,percentage:=100*frequency/sum(frequency)]
   res ## To force it...???
   outcols <- colnames(res)
@@ -380,8 +382,9 @@ freqsdt <- freqsDT <- function(DT, groupcols, percent=TRUE) {
 
 ## Also from https://st2.ning.com/topology/rest/1.0/file/get/4077505910?profile=original
 allfreqs <- function(DT, catlim=100L) {
-  stopifnot(is.data.table(DT), is.integer(catlim) & catlim > 0L)
-  if(NROW(DT) > 1e6) { 
+  stopifnot("needs a data.table" = is.data.table(DT),
+            "Number of categories (as integer) not provided" = is.integer(catlim) & catlim > 0L)
+  if(NROW(DT) > 1e6) {
     cat("####################################################\n")
     cat("The datatable contains more than 1 million rows     \n")
     cat("  and this function crashes R easily...so subsetting\n")
@@ -409,16 +412,17 @@ getAllS3methods <- function(func) {
   ## R> library("sf"); ?st_cast
   ## R> getAllS3methods("st_cast")
   ## R> str(getAllS3methods("st_cast"))
-  stopifnot(is.character(func), length(func) == 1L)
+  stopifnot("need function name as a character string" = is.character(func),
+            "more than one function provided" = length(func) == 1L)
 
   m <- .S3methods(func)
   ms <- gsub("\\*$", "", as.character(m)) ## remove '*' at end
-  
+
   s3methods <- sapply(ms, function(x) c(strsplit(x, "\\.")))
   ## cannot use s3methods directly...
   ## table(lengths(s3methods))
   ## s3methods[lengths(s3methods) > 2L] ## print.data.table is one example of issue...
-  
+
   fixed_s3methods <- lapply(s3methods, function(x) c(x[1], paste0(x[-1L], collapse=".")))
   funcdefs <- lapply(fixed_s3methods, function(x) do.call(getS3method, as.list(x)))
   funcdefs
@@ -426,8 +430,14 @@ getAllS3methods <- function(func) {
 
 generate_random_filename <- genrandfilename <-
   function(minlen=5L, maxlen=20L, filechars=paste0(c(letters,LETTERS,0:9),collapse=""), extensions=c('pdf','exe','txt','docx','xlsx','md','dat','csv','shp','prj','dbf'), allowspaces=FALSE) {
-    stopifnot(is.integer(minlen), is.integer(maxlen), minlen > 0L, maxlen > 0L, maxlen >= minlen)
-    stopifnot(isTRUE(allowspaces) || isFALSE(allowspaces), is.character(filechars), is.character(extensions))
+    stopifnot("needs integer minlen. Try suffix 'L' to coerce number to integer" = is.integer(minlen),
+              "needs integer maxlen. Try suffix 'L' to coerce number to integer" = is.integer(maxlen),
+              "minlen is negative?" = minlen > 0L,
+              "maxlen is negative?" = maxlen > 0L,
+              "maxlen is less than minlen?" = maxlen >= minlen)
+    stopifnot("allowspaces needs to be logical" = isTRUE(allowspaces) || isFALSE(allowspaces),
+              "character vector needed" = is.character(filechars),
+              "character vector needed" = is.character(extensions))
     require("data.table");
     len <- sample(seq.int(minlen, maxlen),1)
     filechars <- unlist(strsplit(filechars, ""))
@@ -436,7 +446,7 @@ generate_random_filename <- genrandfilename <-
       ## browser()
       char_prob_tbl <- rbindlist(list(char_prob_tbl, list(" ", 2/(length(filechars)+1))))
       char_prob_tbl[char != ' ', prob:=(1 - char_prob_tbl[char==' ', prob])/ .N]
-      stopifnot(char_prob_tbl[, sum(prob)] == 1L)
+      stopifnot("probability doesn't add to 1!!" = char_prob_tbl[, sum(prob)] == 1L)
     }
     ## filename <- paste0(sample(filechars, len, replace=T), collapse="")
     filename <- paste0(sample(char_prob_tbl$char, len, prob=char_prob_tbl$prob, replace=T), collapse="")
