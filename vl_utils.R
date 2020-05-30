@@ -455,3 +455,7 @@ generate_random_filename <- genrandfilename <-
     filename
   }
 
+## from data.table/R/utils.R
+isTRUEorFALSE <- function(x) is.logical(x) && length(x) == 1L && !is.na(x)
+isTRUEorNA <- function(x) is.logical(x) && length(x) == 1L && (is.na(x) || x)
+
