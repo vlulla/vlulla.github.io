@@ -1325,3 +1325,41 @@ layout: default
     R> genrandfilename()
     R> files <- replicate(15, generate_random_filename())
     ```
+
+96. Generate a list of prefixes.
+    ```r
+    prefixes <- function(x) {
+      ## This is analogous to J's \
+      ##
+      ## In J try:
+      ## ]\'banana'
+      ##
+      ## In R:
+      ## R> prefixes(1:5)
+      ## R> prefixes(letters[1:5])
+      ##
+      ## R> all.equal(cumsum(1:10), unlist(lapply(prefixes(1:10), sum)))
+      ## R> all.equal(cumprod(1:10), unlist(lapply(prefixes(1:10), prod)))
+      ## R> all.equal(cummax(1:10), unlist(lapply(prefixes(1:10), max)))
+      ## R> with(list(x=runif(15)), all.equal(cumsum(x), unlist(lapply(prefixes(x), sum))))
+      ## R> with(list(x=runif(15)), all.equal(cumprod(x), unlist(lapply(prefixes(x), prod))))
+      ## R> with(list(x=runif(15)), all.equal(cummax(x), unlist(lapply(prefixes(x), max))))
+      ##
+      stopifnot(is.vector(x))
+      mapply(function(a,b) x[seq.int(a,b)], rep(1,length(x)), seq_along(x))
+    }
+    ```
+
+    This can be used to create some other cumulative functions which are not
+    present in R. Here are a couple of examples:
+    ```r
+    cumsd <- function(x) {
+      stopifnot(is.vector(x), (is.numeric(x) || is.integer(x)))
+      unlist(lapply(prefixes(x), sd))
+    }
+    cummean <- function(x) {
+      stopifnot(is.vector(x), (is.numeric(x) || is.integer(x)))
+      unlist(lapply(prefixes(x), mean))
+    }
+    ```
+

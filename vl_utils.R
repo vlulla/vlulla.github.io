@@ -167,6 +167,31 @@ groups <- function(vector, numitems, overlap=FALSE) {
   t(mapply(function(x,y) vector[x:y], startidx, endidx))
 }
 
+prefixes <- function(x) {
+  ## This is analogous to J's \
+  ##
+  ## In J try:
+  ## ]\'banana'
+  ##
+  ## In R:
+  ## R> prefixes(1:5)
+  ## R> prefixes(letters[1:5])
+  ## R> all.equal(unlist(lapply(prefixes(1:5),sum)), cumsum(1:5))
+  ## R> all.equal(unlist(lapply(prefixes(1:5),prod)), cumprod(1:5))
+  ##
+  ## This can be useful in creating some cumulative functions...for e.g.
+  ## cumsd <- function(x) {
+  ##   stopifnot(is.vector(x), is.numeric(x) || is.integer(x))
+  ##   unlist(lapply(prefixes(x), sd))
+  ## }
+  ## cummean <- function(x) {
+  ##   stopifnot(is.vector(x), is.numeric(x) || is.integer(x))
+  ##   unlist(lapply(prefixes(x), mean))
+  ## }
+  stopifnot(is.vector(x))
+  mapply(function(a,b) x[seq.int(a,b)], rep(1,length(x)), seq_along(x))
+}
+
 ## Returns the length of a function
 function.length <- function(f) {
   if(is.character(f))
