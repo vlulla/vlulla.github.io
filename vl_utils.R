@@ -192,6 +192,25 @@ prefixes <- function(x) {
   mapply(function(a,b) x[seq.int(a,b)], rep(1,length(x)), seq_along(x))
 }
 
+suffixes <- function(x) {
+  ## This is analogous to J's \.
+  ##
+  ## In J try:
+  ## ]\. 'banana'
+  ## banana
+  ## anana
+  ## nana
+  ## ana
+  ## na
+  ## a
+  ##
+  ## I don't know how useful this will be in R.
+  ## R> suffixes(unlist(strsplit('banana','')))
+  ##
+  stopifnot(is.vector(x))
+  mapply(function(a,b) x[seq.int(a,b)], seq_along(x), rep(length(x),length(x)))
+}
+
 ## Returns the length of a function
 function.length <- function(f) {
   if(is.character(f))
