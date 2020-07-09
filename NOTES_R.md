@@ -1363,3 +1363,56 @@ layout: default
     }
     ```
 
+97. I have often felt the need to shuffle the input for my
+	functions/algorithms to ensure that they are not relying on the  ordering
+	of data. For instance, when I'm first writing a function which takes
+	a sequence as input, I'll use a simple sequence like `seq.int(1L, 10L)` as
+	input to get the function working. And, once the function is ready I'll
+	start using it. And, as I continue to use this function/algo I will notice
+	that when the input is not ordered (or simple) I often get results that
+	don't make sense. And, this is usually the result of using simple vectors
+	for testing when designing the function initially. As my understanding
+	improves and I realize the unstated, but definitely present, assumption
+	that I had made while writing the function I will have to try to fix the
+	function with _shuffled_ vectors. And, this function is an attempt to
+	create permutations of an input `vector` or `data.frame` which can be used
+	to shuffle these collections which can then be used as argument[s] for
+	function. So, for instance if I had `mymean <- function(x)
+	{ sum(x)/length(x) }` then I would check it like this
+	`lapply(permutations(1:15,n=20), mymean)` to ensure that I get the same
+	result for all the permutations!
+
+    ```r
+    permutations <- function(x, n=6L) {
+
+      ## useful function to generate permutations of vector or data.frame.
+      ##
+      ## Can be used to generate random ordering so that you can check whether
+      ## your algo/functions depend on particular ordering of variables.
+      ##
+      ## R> permutations(1:10)
+      ## R> permutations(mtcars)
+
+      stopifnot(is.vector(x) || is.data.frame(x))
+
+      idx <- seq_along(x)
+      if(is.data.frame(x)) {
+        idx <- seq_len(nrow(x))
+      }
+
+      ## indices <- replicate(n, sample(idx, length(idx))) ## Permutations are cols...
+      ## indices <- t(replicate(n, sample(idx, length(idx)))) ## permutations are rows...
+      ## indices <- lapply(seq_len(n), function(x) sample(idx, length(idx)))
+      ##
+      indices <- replicate(n, sample(idx, length(idx))) ## Permutations are cols...
+
+      res <- if(is.vector(x)) {
+        ## x[indices]
+        lapply(seq_len(ncol(indices)), function(i) x[indices[,i]])
+      } else {
+        ## x[indices,,drop=FALSE] ## drop=FALSE...just in case we get 1 col data.frame!!
+        lapply(seq_len(ncol(indices)), function(i) x[indices[, i], , drop=FALSE])
+      }
+      res
+    }
+	```

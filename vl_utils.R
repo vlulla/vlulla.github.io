@@ -416,7 +416,12 @@ freqsdt <- freqsDT <- function(DT, groupcols, percent=TRUE) {
   ## R> freqsdt(i, c("Species"))
 
   stopifnot("needs a data.table" = is.data.table(DT),
-            "column names not provided" = is.character(groupcols) & length(groupcols) > 0L)
+            "column names not provided" = is.character(groupcols) & length(groupcols) > 0L,
+            "not all groupcols in DT!" = all(groupcols %chin% names(DT)))
+  is.categorical <- function(x) { is.logical(x) || is.factor(x) || is.character(x) }
+  if(!all(sapply(DT[, ..groupcols], is.categorical))) {
+    warning("Some of the grouping columns don't appear to be categorical")
+  }
   res <- DT[, .(frequency=.N), by=groupcols][order(-frequency)][,percentage:=100*frequency/sum(frequency)]
   res ## To force it...???
   outcols <- colnames(res)
@@ -429,12 +434,12 @@ allfreqs <- function(DT, catlim=100L) {
   stopifnot("needs a data.table" = is.data.table(DT),
             "Number of categories (as integer) not provided" = is.integer(catlim) & catlim > 0L)
   if(NROW(DT) > 1e6) {
-    cat("####################################################\n")
-    cat("The datatable contains more than 1 million rows     \n")
-    cat("  and this function crashes R easily...so subsetting\n")
-    cat("  datatable to only the first million rows...       \n")
-    cat("####################################################\n\n\n")
-    DT <- DT[1:1e6, ]
+    cat("###########################################################\n")
+    cat("The datatable contains more than 1 million rows            \n")
+    cat("  and this function crashes R easily...so subsetting       \n")
+    cat("  datatable to only one million (randomly selected) rows...\n")
+    cat("###########################################################\n\n\n")
+    DT <- DT[sample(.N, 1e6), ]
   }
   names <- names(DT)
   namelen <- length(names)
@@ -503,3 +508,42 @@ generate_random_filename <- genrandfilename <-
 isTRUEorFALSE <- function(x) is.logical(x) && length(x) == 1L && !is.na(x)
 isTRUEorNA <- function(x) is.logical(x) && length(x) == 1L && (is.na(x) || x)
 
+## Vandermonde matrix!
+vander <- VM <- function(vec, powers) {
+  stopifnot(is.vector(vec) && (is.integer(vec) || is.numeric(vec)))
+  stopifnot(is.integer(powers))
+  outer(vec, 0:powers, `^`)
+}
+
+permutations <- function(x, n=6L) {
+
+  ## useful function to generate permutations of vector or data.frame.
+  ##
+  ## Can be used to generate random ordering so that you can check whether
+  ## your algo/functions depend on particular ordering of variables.
+  ##
+  ## R> permutations(1:10)
+  ## R> permutations(mtcars)
+
+  stopifnot(is.vector(x) || is.data.frame(x))
+
+  idx <- seq_along(x)
+  if(is.data.frame(x)) {
+    idx <- seq_len(nrow(x))
+  }
+
+  ## indices <- replicate(n, sample(idx, length(idx))) ## Permutations are cols...
+  ## indices <- t(replicate(n, sample(idx, length(idx)))) ## permutations are rows...
+  ## indices <- lapply(seq_len(n), function(x) sample(idx, length(idx)))
+  ##
+  indices <- replicate(n, sample(idx, length(idx))) ## Permutations are cols...
+
+  res <- if(is.vector(x)) {
+    ## x[indices]
+    lapply(seq_len(ncol(indices)), function(i) x[indices[,i]])
+  } else {
+    ## x[indices,,drop=FALSE] ## drop=FALSE...just in case we get 1 col data.frame!!
+    lapply(seq_len(ncol(indices)), function(i) x[indices[, i], , drop=FALSE])
+  }
+  res
+}
