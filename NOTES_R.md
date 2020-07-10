@@ -133,7 +133,7 @@ layout: default
     downloaded the source and compiled it everything worked...so I just
     issued the command:
 
-    ```{#install.packages .r}
+    ```r
     R> install.packages("rgdal", type="source", configure.args=c("--with-proj-include=/opt/local/include", "--with-proj-lib=/opt/local/lib"))
     ```
 
@@ -175,7 +175,7 @@ layout: default
  12. Use `methods`, `showMethods`, and `getS3Method` to see what methods
      are available for class or object!
 
-     ```{#methods .r .numberLines}
+     ```r
      R> methods(class="data.frame")
      R> methods(class="sf")
      R> methods(class="data.table") ## ?data.table:::cube
@@ -1004,7 +1004,7 @@ layout: default
     Consider the example below of how to assign appropriate grades without having
     to do a lot of work!
 
-    ```{#findInterval .r .numberLines}
+    ```r
     R> d <- data.frame(points=c(78, 82, 95, 100, 70, 65))
     R> cutoffs <- c(51,61,71,81,91,101) ## Cutoff thresholds for grades!
     R> d$grp <- findInterval(d$points, cutoffs)
@@ -1025,7 +1025,7 @@ layout: default
 
     To verify that this is, in fact, the case try the following:
 
-    ```{#using-findInterval .r .numberLines}
+    ```r
     R> d1 <- data.frame(points=1:101, expected=rep(c(0,1,2,3,4,5,6),c(50,10,10,10,10,10,1)))
     R> d1$grp <- findInterval(d1$points, cutoffs)
     R> stopifnot(all(d1$grp == d1$expected))
@@ -1033,7 +1033,7 @@ layout: default
 
 77. Use `find` to see where a particular value was defined.  For e.g.,
 
-    ```{#using-find .r .numberLines}
+    ```r
     R> find("ls")  ## package:base
     R> find("drivers") ## package:MASS
     R> find("petrol") ## package:MASS
@@ -1047,7 +1047,7 @@ layout: default
     slow code, of matrix/data.frame and yield horrible performance.  This is
     due to R's copy-on-write semantics!  Compare the functions below:
 
-    ```{#do-not-use-nrow .r .numberLines}
+    ```r
     R> f1 <- function() {
          dimstate = 100; nmcmc = 1e4
          chain = matrix(0,nrow=nmcmc,ncol=dimstate);
@@ -1159,14 +1159,14 @@ layout: default
     achieved by using the `on.exit` funciton.  Have the following lines whenever
     you make changes to graphics state.
 
-    ```{#using-on.exit .r .numberLines}
+    ```r
     opar <- par(no.readonly=TRUE)
     on.exit(par(opar), add=TRUE)  ## ?on.exit
     ```
 
 87. A useful random string generating function.
 
-    ```{#genrandstr .r .numberLines}
+    ```r
     R> genrandstr <- function(stringlen = 5) {
     +    paste0(sample(c(letters,LETTERS), stringlen, replace=TRUE), collapse="")
     +  }
@@ -1186,7 +1186,7 @@ layout: default
 
 88. A very useful function!
 
-    ```{#run_examples_from_package .r .numberLines}
+    ```r
     R> run_examples_from_package <- function(pkgname, local=TRUE) {
     +    pkg <- sprintf("package:%s", pkgname)
     +    stopifnot(pkg %in% search())
@@ -1247,7 +1247,7 @@ layout: default
 90. Using lapply/sapply can simplify a lot of geospatial code!  Consider this
     example from the vignette of `sp::over` on pg 3.
 
-    ```{#setting-example .r .numberLines}
+    ```r
     > library(sp)
     > x <- c(0.5,0.5,1,0.5)
     > y <- c(1.5,0.5,0.5,0.5)
@@ -1269,7 +1269,7 @@ layout: default
     a list and then using lapply to generate the final polygon.  Consider the
     following simplification (at least in my opinion):
 
-    ```{#using-lapply-geospatial .r .numberLines}
+    ```r
     R> l <- list(cbind(xpol=xpol-1.05,ypol), cbind(xpol,ypol),
     +           cbind(xpol,ypol=ypol-1), cbind(xpol=xpol+1,ypol),
     +           cbind(xpol=xpol+.4, ypol=ypol+.1))
@@ -1285,7 +1285,7 @@ layout: default
     macports then you need to use configure.args to set variables needed to
     get Rmpi to compile.  I had to use the following:
 
-    ```{#install.packages .r .numberLines}
+    ```r
     R> install.packages(c("Rmpi"), dependencies=TRUE,configure.args=c("--with-Rmpi-include=/opt/local/include/openmpi-devel-mp"
              "--with-Rmpi-libpath=/opt/local/lib/openmpi-devel-mp", "--with-Rmpi-type=OPENMPI"))
     ```
@@ -1300,7 +1300,7 @@ layout: default
 93. Here are a couple of very useful frequency functions! I got this idea from 
     <https://st2.ning.com/topology/rest/1.0/file/get/4077505910?profile=original>
 
-    ```{#freqsdt .r .numberLines}
+    ```r
     ## I have it organized how I think it will be beneficial to me...
     freqsdt <- function(DT, groupcols, percent=TRUE) {
         stopifnot(is.data.table(DT), is.character(groupcols) & length(groupcols) > 0L, all(groupcols %chin% colnames(DT)))
@@ -1330,7 +1330,7 @@ layout: default
 
     And you use them like so:
 
-    ```{#using-freqsdt .r .numberLines}
+    ```r
     R> d <- data.table(grp=sample(c('a','b','c'),1000,replace=T),grp1=sample(1:2,1000,replace=T),x=runif(1000),y=runif(1000),z=runif(1000))
     R> freqsdt(d, c("grp"))
     R> freqsdt(d, c("grp1"))
@@ -1341,7 +1341,7 @@ layout: default
 
 94. Get all the different S3methods of a function
 
-    ```{#getAllS3methods .r .numberLines}
+    ```r
     getAllS3methods <- function(func) {
         ## I was looking at ?sf::`st_cast` and wanted to see all the different st_cast methods for different geometry types.
         ## This is how to go about it.
@@ -1372,7 +1372,7 @@ layout: default
 
 95. Generate a random filename.
 
-    ```{#generate_random_filename .r .numberLines}
+    ```r
     generate_random_filename <- genrandfilename <- 
       function(minlen=5L,maxlen=20L,filechars=paste0(c(letters,LETTERS,0:9),collapse=""),extensions=c("pdf","exe","txt","md","xls","doc","xlsx","dat","csv","shp","prj"),allowspaces=FALSE) {
         stopifnot(is.integer(minlen), is.integer(maxlen), minlen > 0L, maxlen > 0L, maxlen >= minlen)
@@ -1399,14 +1399,14 @@ layout: default
 
     And you use them like so:
 
-    ```{#using-genrandfilename .r .numberLines}
+    ```r
     R> genrandfilename()
     R> files <- replicate(15, generate_random_filename())
     ```
 
 96. Generate a list of prefixes.
 
-    ```{#prefixes .r .numberLines}
+    ```r
     prefixes <- function(x) {
       ## This is analogous to J's \
       ##
@@ -1432,7 +1432,7 @@ layout: default
     This can be used to create some other cumulative functions which are not
     present in R. Here are a couple of examples:
 
-    ```{#cumulative-functions .r .numberLines}
+    ```r
     cumsd <- function(x) {
       stopifnot(is.vector(x), (is.numeric(x) || is.integer(x)))
       unlist(lapply(prefixes(x), sd))
@@ -1463,7 +1463,7 @@ layout: default
 	`lapply(permutations(1:15,n=20), mymean)` to ensure that I get the same
 	result for all the permutations!
 
-    ```{#permutations .r .numberLines}
+    ```r
     permutations <- function(x, n=6L) {
 
       ## useful function to generate permutations of vector or data.frame.
