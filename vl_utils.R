@@ -103,6 +103,17 @@ withOptions <- function(optlist, expr) {
   eval.parent(expr)
 }
 
+withPar <- function(parlist, expr) {
+  ## See the section ``Deep End'' on the excellent http://www.burns-stat.com/the-options-mechanism-in-r/
+  ##
+  ## R> plot(mtcars$mpg, mtcars$displ)
+  ## R> withPar(list(mar=c(1,1,1,1),pch=16), plot(mtcars$mpg, mtcars$displ))
+  oldpar <- par(parlist)
+  on.exit(par(oldpar))
+  expr <- substitute(expr)
+  eval.parent(expr)
+}
+
 theme_vl <- theme_VL <- function(base_size=11L) {
 
   theme_bw(base_size=base_size) +
@@ -287,6 +298,7 @@ lsos <- lsobjs <- .ls.objects  <- function(pos=1L, pattern, order.by, decreasing
   if(head)
     out <- head(out, n)
 
+  gc() ## This function uses a lot of memory! Free it before exiting.
   return(out)
 }
 
