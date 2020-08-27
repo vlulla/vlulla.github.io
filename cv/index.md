@@ -1,8 +1,11 @@
 ---
 layout: default
-title: Vijay's CV
+title: Vijay's CV and Resume
 ---
 
 # CV
+[CV](cv.pdf)
 
-TODO
+# Resume
+[Resume](resume.pdf)
+
