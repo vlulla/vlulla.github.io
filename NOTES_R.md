@@ -1497,3 +1497,35 @@ layout: default
       res
     }
 	```
+
+98. When using R interactively I have often found the need to modify some
+	`options` or `par` settings for a particular piece of code snippet which
+	needs to be reverted back after the code snippet is done. This can be
+	accomplished by writing a function which uses `on.exit`. This was explained
+	by Patrick Burns at
+	<https://www.burns-stat.com/the-options-mechanism-in-r/>
+
+	```.r
+	withOptions <- function(optlist, expr) {
+		opts <- options(optlist)
+		on.exit(options(opts))
+		expr <- substitute(expr)
+		eval.parent(expr)
+	}
+	R> print((1:10)^-1)
+	R> withOptions(list(digits=3),print((1:10)^-1))
+	```
+
+	And we can do the same thing for `par` too! And, in my opinion, it is
+	a whole lot more helpful with `par` than it is with `options`.
+
+	```r
+	withPars <- function(parlist, expr) {
+		opar <- par(parlist)
+		on.exit(par(opar))
+		expr <- substitute(expr)
+		eval.parent(expr)
+	}
+	R> plot(mtcars$mpg, mtcars$disp)
+	R> withPars(list(mar=c(1,1,1,1)), plot(mtcars$mpg, mtcars$disp))
+	```
