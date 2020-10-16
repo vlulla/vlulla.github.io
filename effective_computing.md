@@ -27,7 +27,7 @@ These are the software tools/packages (emphasized ones more frequently than alte
 1. Git.
 1. Paint.NET, Inkscape.
 
-**NOTE: ** I’m willing to answer questions about any of these tools (provided I know the answer)!
+**NOTE:** I'm willing to answer questions about any of these tools (provided I know the answer)!
 
 # General guidelines
 
@@ -71,7 +71,7 @@ I found this solution [here](http://www.cs.cmu.edu/~nbeckman/problem.html).  App
 
 ### MS Word: Cannot figure out what's causing this issue?
 
-Use MS word in draft/outline view. Set the “Style area pane width...” to some practical value and solve many annoying problems. Shauna Kelly’s page at <http://www.shaunakelly.com/> under the “Making the most of Word in your business” title lists solutions and best practices for common MS Word issues!
+Use MS word in draft/outline view. Set the "Style area pane width..." to some practical value and solve many annoying problems. Shauna Kelly's page at <http://www.shaunakelly.com/> under the "Making the most of Word in your business" title lists solutions and best practices for common MS Word issues!
 
 * * * * *
 
