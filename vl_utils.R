@@ -537,7 +537,7 @@ permutations <- function(x, n=6L) {
   ## R> permutations(1:10)
   ## R> permutations(mtcars)
 
-  stopifnot(is.vector(x) || is.data.frame(x))
+  stopifnot((is.vector(x) & length(x) > 1L) || (is.data.frame(x) & nrow(x) > 1L))
 
   idx <- seq_along(x)
   if(is.data.frame(x)) {
