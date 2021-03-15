@@ -1,6 +1,7 @@
 ---
 title: "Good Documentation"
 layout: "post"
+author: "Vijay Lulla"
 ---
 
 There is a great writeup about documentation at <https://documentation.divio.com/>. That site 
