@@ -1529,3 +1529,23 @@ layout: default
 	R> plot(mtcars$mpg, mtcars$disp)
 	R> withPars(list(mar=c(1,1,1,1)), plot(mtcars$mpg, mtcars$disp))
 	```
+
+99. It is often required to fix column names for GIS related work. The below
+    function tries to fix column names that are likely to work in GIS softwares.
+
+        ```r
+        fixcolnames <- function(x, lowercase=FALSE) {
+
+          ## Very useful for GIS related work!!!!
+
+          f <- ifelse(lowercase, tolower, identity)
+          gsub("^([0-9]+)?_|_$", "", f(gsub("[^A-Za-z0-9]+", "_", as.character(x))))
+        }
+        R> # Try this to see the usefulness of this little function!
+        R> weird_colnames <- c(" with spaces ", "| with strange' punctuation |", "with-hyphens!", "with(parenthesis)",
+             "0 with leading numbers", "99 more leading numbers","But Case Sensitive!")
+        R> d <- data.table(weird_colnames=weird_colnames)
+        R> d[ , `:=`(fixed_colnames = fixcolnames(weird_colnames))]
+        R> d
+        ```
+

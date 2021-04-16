@@ -68,7 +68,7 @@ fixcolnames <- normalize_string <- function(x, lowercase=FALSE) {
   ## Very useful for GIS related work!!!!
 
   f <- ifelse(lowercase, tolower, identity)
-  gsub("^_|_$", "", f(gsub("[^A-Za-z0-9]+", "_", as.character(x))))
+  gsub("^([0-9]+)?_|_$", "", f(gsub("[^A-Za-z0-9]+", "_", as.character(x))))
 }
 
 num_unique <- nunique <- function(x) length(unique(x))
