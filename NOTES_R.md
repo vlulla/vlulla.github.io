@@ -1505,7 +1505,7 @@ layout: default
 	by Patrick Burns at
 	<https://www.burns-stat.com/the-options-mechanism-in-r/>
 
-	```.r
+	```r
 	withOptions <- function(optlist, expr) {
 		opts <- options(optlist)
 		on.exit(options(opts))
