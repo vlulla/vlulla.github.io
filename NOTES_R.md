@@ -1572,7 +1572,7 @@ layout: default
 102. A very useful function to display all the objects in the R environment. This is just like RStudio's environment
      pane...but this works in base R too!
 
-     ```{#lsos .r .numberLines}
+     ```r
      lsos <- lsobjs <- .ls.objects  <- function(pos=1L, pattern, order.by, decreasing=FALSE, head=FALSE, n=5) {
 
        ##
