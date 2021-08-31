@@ -1548,4 +1548,23 @@ layout: default
     R> d[ , `:=`(fixed_colnames = fixcolnames(weird_colnames))]
     R> d
     ```
+100. To load SparkR in an R session make sure to download spark and set the SPARK_HOME envvar.
+     Then you can load `SparkR` library using the following:
 
+     ```r
+     library(SparkR,lib.loc=file.path(Sys.getenv("SPARK_HOME"),"R","lib"))
+     sparkR.session(master="local[*]",sparkConfig=list(spark.driver.memory="2g"))
+     ```
+
+101. Use `all.equal` to check if numbers are equal. R's dynamic nature makes comparison using `==` very strange.
+     Check out the difference between `==` and `all.equal` here:
+
+     ```r
+     R> deg2rad <- function(deg) deg * pi / 180
+     R> rad2deg <- function(rad) rad * 180 / pi
+     R> d <- data.table(deg=1:15)[,rad:=deg2rad(deg)][,deg1:=rad2deg(rad)]
+     R> d[, all(deg == deg1)] ## returns FALSE!!
+     R> d[, .(deg, deg1)] ## printing looks ok....
+     R> d[deg != deg1, .(deg, deg1, diff=deg-deg1)] ## main problem....
+     R> d[, all.equal(deg, deg1)] ## returns TRUE!!
+     ```
