@@ -1568,3 +1568,59 @@ layout: default
      R> d[deg != deg1, .(deg, deg1, diff=deg-deg1)] ## main problem....
      R> d[, all.equal(deg, deg1)] ## returns TRUE!!
      ```
+
+102. A very useful function to display all the objects in the R environment. This is just like RStudio's environment
+     pane...but this works in base R too!
+
+     ```{#lsos .r .numberLines}
+     lsos <- lsobjs <- .ls.objects  <- function(pos=1L, pattern, order.by, decreasing=FALSE, head=FALSE, n=5) {
+
+       ##
+       ## See http://stackoverflow.com/questions/1358003/tricks-to-manage-the-available-memory-in-an-r-session
+       ##
+       ## Modified to sort correctly based on size! There's a subtle bug in the SO answer
+
+       napply <- function(names, fn) sapply(names, function(x) fn(get(x, pos=pos)))
+       names <- ls(pos=pos, pattern=pattern)
+       if(length(names) == 0L) return(character(0))
+
+       obj.class <- napply(names, function(x) as.character(class(x))[[1]])
+       obj.mode <- napply(names, base::mode)
+       obj.type <- ifelse(is.na(obj.class), obj.mode, obj.class)
+       obj.size <- napply(names, function(x) {
+                            l <- capture.output(print(object.size(x), units="auto"))
+                            l[length(l)]
+                       })
+       obj.dim <- t(napply(names, function(x) as.numeric(dim(x))[1:2]))
+       vec <- is.na(obj.dim)[,1] & (obj.type != "function")
+       obj.dim[vec, 1] <- napply(names, length)[vec]
+
+       out <- data.frame(obj.type, obj.size, obj.dim)
+       names(out) <- c("Type", "Size", "Rows", "Columns")
+
+       if(any(obj.type %in% c("RasterStack", "RasterBrick"))) {
+         nlayers <- function(x) ifelse(inherits(x, c("RasterStack", "RasterBrick")),
+                                       raster::nlayers(x), NA)
+         out <- cbind(out, Layers=napply(names, nlayers))
+       }
+
+       if(!missing(order.by)) {
+         idx <- if (order.by=="Size") {
+           sizes <- napply(names, object.size)
+           order(sizes, decreasing=decreasing)
+         } else {
+           order(out[[order.by]], decreasing=decreasing)
+         }
+         out <- out[idx, ]
+       }
+
+       if(head)
+         out <- head(out, n)
+
+       gc() ## This function uses a lot of memory! Free it before exiting.
+       return(out)
+     }
+
+     R> lsos()
+     ```
+
