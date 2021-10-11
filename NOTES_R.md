@@ -1598,9 +1598,10 @@ layout: default
        out <- data.frame(obj.type, obj.size, obj.dim)
        names(out) <- c("Type", "Size", "Rows", "Columns")
 
-       if(any(obj.type %in% c("RasterStack", "RasterBrick"))) {
+       if(any(obj.type %in% c("RasterStack", "RasterBrick", "SpatRaster"))) {
          nlayers <- function(x) ifelse(inherits(x, c("RasterStack", "RasterBrick")),
-                                       raster::nlayers(x), NA)
+                                       raster::nlayers(x),
+                                       ifelse(inherits(x, c("SpatRaster")), terra::nlyr(x), NA))
          out <- cbind(out, Layers=napply(names, nlayers))
        }
 
