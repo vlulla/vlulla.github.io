@@ -103,11 +103,11 @@ withOptions <- function(optlist, expr) {
   eval.parent(expr)
 }
 
-withPar <- function(parlist, expr) {
+withPar <- withPars <- function(parlist, expr) {
   ## See the section ``Deep End'' on the excellent http://www.burns-stat.com/the-options-mechanism-in-r/
   ##
   ## R> plot(mtcars$mpg, mtcars$displ)
-  ## R> withPar(list(mar=c(1,1,1,1),pch=16), plot(mtcars$mpg, mtcars$displ))
+  ## R> withPar(list(mar=c(1,1,1,1),pch=16), plot(mtcars$mpg, mtcars$disp))
   oldpar <- par(parlist)
   on.exit(par(oldpar))
   expr <- substitute(expr)
@@ -238,8 +238,12 @@ package.functions <- function(package, all.names=FALSE) {
     }
   bare_pkg <- gsub("^package:", "", qual_pkg)
   if (! qual_pkg %in% search()) {
+    orig_search <- search()
     require(bare_pkg, character.only=TRUE)
-    on.exit(detach(qual_pkg, character.only=TRUE)) ## ?`detach`
+    pkgs_added <- setdiff(search(), orig_search) ## pkgs added by our require call!
+    for(p in pkgs_added) {
+      on.exit(detach(name=p, character.only=TRUE),add=TRUE) ## ?`detach`
+    }
   }
   obj.names <- ls(name=qual_pkg, all.names=all.names)
   objs <- lapply(obj.names, get, qual_pkg)
@@ -336,7 +340,7 @@ genrandstr <- function(stringlen=5L) {
   ## R> replicate(8, genrandstr(8))
   ##
   ## Some useful generating functions:
-  ## R> strs <- replicate(500, genrandstr(10))  ## 500 strings of length 8
+  ## R> strs <- replicate(500, genrandstr(10))  ## 500 strings of length 10
   ## R> rstrs <- sapply(sample(5:20, 500, replace=TRUE), genrandstr) ###  SUPER USEFUL!!! 500 strings of length between 5-20!! You need this...
 
   paste0(sample(c(letters,LETTERS), stringlen, replace=TRUE), collapse="")
@@ -538,7 +542,7 @@ permutations <- function(x, n=6L) {
   ## R> permutations(1:10)
   ## R> permutations(mtcars)
 
-  stopifnot((is.vector(x) & length(x) > 1L) || (is.data.frame(x) & nrow(x) > 1L))
+  stopifnot((is.vector(x) && length(x) > 1L) || (is.data.frame(x) && nrow(x) > 1L))
 
   idx <- seq_along(x)
   if(is.data.frame(x)) {

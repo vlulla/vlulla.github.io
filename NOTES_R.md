@@ -390,23 +390,29 @@ layout: default
 
      R> package.function.lengths <- function(package) {
           package.functions <- function(package) {
-            pkg <- sprintf("package:%s", package)
-            if (!pkg %in% search()) {
+            qual_pkg <-
+              if (isTRUE(startsWith(package, "package:"))) {
+                  package
+              } else {
+                  sprintf("package:%s", package)
+              }
+            bare_pkg <- gsub("^package:","",qual_pkg)
+            if (! qual_pkg %in% search()) {
               orig_search <- search()
-              library(package, character.only=TRUE)
+              require(bare_pkg, character.only=TRUE)
               pkgs_added <- setdiff(search(), orig_search) ## pkgs added by our library call!
               ## FIXME:
               ## for(p in rev(pkgs_added)) {
               ##   ## print(substitute(detach(name=p, character.only=TRUE, unload=TRUE), list(p=p)))
               ##   on.exit(substitute(detach(name=p, character.only=TRUE, unload=TRUE), list(p=p)), add=TRUE)
               ## }
-              for(i in seq_along(pkgs_added)) {
-                on.exit(detach(),add=TRUE)  ## Terrible hack!
+              for(p in pkgs_added) {
+                on.exit(detach(name=p, character.only=TRUE),add=TRUE)  ## Terrible hack!
                 ## NOTE: No idea how to use substitute with `on.exit`!!
               }
             }
-            object.names <- ls(name=pkg)
-            objects <- sapply(object.names, get, pkg)
+            object.names <- ls(name=qual_pkg)
+            objects <- sapply(object.names, get, qual_pkg)
             objects[sapply(objects, is.function)]
           }
 
