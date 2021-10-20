@@ -1630,4 +1630,28 @@ layout: default
 
      R> lsos()
      ```
+103. DE-9IM representations of the various spatial predicates:
+
+     ```
+     Contains(a,b)    <==>  'T*****FF*'
+     CoveredBy(a,b)   <==>  'T*F**F***' \/ '*TF**F***' \/ '**FT*F***' \/ '**F*TF***'
+     Covers(a,b)      <==>  'T*****FF*' \/ '*T****FF*' \/ '***T**FF*' \/ '****T*FF*'
+     Crosses(a,b)     <==>  'T*T******' \/ 'T*****T**' \/ '0********'
+     Disjoint(a,b)    <==>  'FF*FF****'
+     Equals(a, b)     <==>  'T*F**FFF*'
+     Intersects(a,b)  <==>  'T********' \/ '*T*******' \/ '***T*****' \/ '****T****'
+     Overlaps(a,b)    <==>  'T*T***T**' \/ '1*T***T**'
+     Touches(a,b)     <==>  'FT*******' \/ 'F**T*****' \/ 'F***T****'
+     Within(a,b)      <==>  'T*F**F***'
+
+     Contains(a,b)    <==>  Within(b,a)
+     CoveredBy(a,b)   <==>  Covers(b,a)
+     Covers(a,b)      <==>  CoveredBy(b,a)
+     Disjoint(a,b)    <==>  ! Intersects(a,b)
+     Equals(a,b)      <==>  Within(a,b) /\ Contains(a,b)
+     Intersects(a,b)  <==>  ! Disjoint(a,b)
+     Within(a,b)      <==>  Contains(b,a)
+     ```
+
+     See <https://en.wikipedia.org/wiki/DE-9IM#Spatial_predicates> . These are useful with `sf::st_relate` function!
 
