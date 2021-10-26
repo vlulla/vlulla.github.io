@@ -56,6 +56,15 @@ symdiff <- function(x,y) union(setdiff(x,y), setdiff(y,x))
 
 deg2rad <- function(d) d * pi / 180
 rad2deg <- function(r) r * 180 / pi
+# https://stackoverflow.com/a/26757297
+cart2pol <- function(x,y) {
+  rho <- sqrt(x^2+y^2)
+  phi <- atan2(x,y)
+  list(rho=rho,phi=phi)
+}
+pol2cart <- function(rho,phi) {
+  list(x=rho*cos(phi), y=rho*sin(phi))
+}
 
 cov.pop <- function(x, y=NULL, ...) { cov(x, y, ...) * (NROW(x)-1)/NROW(x) }
 var.pop <- function(x, ...) { var(x, ...) * (NROW(x)-1)/NROW(x) }
