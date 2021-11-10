@@ -1655,3 +1655,25 @@ layout: default
 
      See <https://en.wikipedia.org/wiki/DE-9IM#Spatial_predicates> . These are useful with `sf::st_relate` function!
 
+104. Column details:
+
+     ```r
+     ## Column Details for a Data Frame
+     ## ^^^    ^^^^^^^       ^    ^
+     colDetails <- function(DF) {
+       stopifnot("Needs a data.frame or data.table" = inherits(DF, "data.frame"))
+       colnames <- colnames(DF)
+       colclasses <- sapply(DF, classes)
+       colidx <- seq_along(DF)
+       num_nas <- sapply(DF, numna)
+       data.frame(ColName=colnames, ColClasses=colclasses, ColIdx=colidx, NumNA=num_nas, pctNA=100*num_nas/nrow(DF), row.names=NULL)
+     }
+     R> colDetails(mtcars)
+     ```
+
+     And, the helper functions used in the function above are:
+
+     ```r
+     numna <- numnas <- numNA <- numNAs <- function(x) sum(is.na(x))
+     classes <- function(x) paste(class(x), collapse=", ")
+     ```

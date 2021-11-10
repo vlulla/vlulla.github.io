@@ -316,6 +316,8 @@ lsos <- lsobjs <- .ls.objects  <- function(pos=1L, pattern, order.by, decreasing
   return(out)
 }
 
+numna <- numNA <- numnas <- numNAs <- function(x) sum(is.na(x))
+
 ## Column Details for a Data Frame
 ## ^^^    ^^^^^^^       ^    ^
 colDetails <- function(DF) {
@@ -323,8 +325,8 @@ colDetails <- function(DF) {
   colnames <- colnames(DF)
   colclasses <- sapply(DF, classes)
   colidx <- seq_along(DF)
-  num_nas <- sapply(DF, function(x) sum(is.na(x)))
-  data.frame(ColName=colnames, ColClasses=colclasses, ColIdx=colidx, NumNA=num_nas, row.names=NULL)
+  num_nas <- sapply(DF, numna)
+  data.frame(ColName=colnames, ColClasses=colclasses, ColIdx=colidx, NumNA=num_nas, pctNA=100*num_nas/nrow(DF), row.names=NULL)
 }
 
 issorted <- function(x) all(order(x) == seq_along(x))
