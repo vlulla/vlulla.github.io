@@ -1625,7 +1625,7 @@ layout: default
          out <- head(out, n)
 
        gc() ## This function uses a lot of memory! Free it before exiting.
-       return(out)
+       return(as.data.table(out, keep.rownames="ID"))
      }
 
      R> lsos()

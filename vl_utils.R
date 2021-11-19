@@ -313,7 +313,7 @@ lsos <- lsobjs <- .ls.objects  <- function(pos=1L, pattern, order.by, decreasing
     out <- head(out, n)
 
   gc() ## This function uses a lot of memory! Free it before exiting.
-  return(out)
+  return(as.data.table(out, keep.rownames="ID"))
 }
 
 numna <- numNA <- numnas <- numNAs <- function(x) sum(is.na(x))
