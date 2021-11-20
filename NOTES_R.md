@@ -1666,7 +1666,8 @@ layout: default
        colclasses <- sapply(DF, classes)
        colidx <- seq_along(DF)
        num_nas <- sapply(DF, numna)
-       data.frame(ColName=colnames, ColClasses=colclasses, ColIdx=colidx, NumNA=num_nas, pctNA=100*num_nas/nrow(DF), row.names=NULL)
+       num_uniq <- sapply(DF, num_unique)
+       data.table(ColName=colnames, ColClasses=colclasses, ColIdx=colidx, NumNA=num_nas, PctNA=round(100*num_nas/nrow(DF),2), NumUniq=num_uniq, PctUniq=round(100*num_uniq/nrow(DF),3), row.names=NULL)
      }
      R> colDetails(mtcars)
      ```
