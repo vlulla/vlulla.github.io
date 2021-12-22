@@ -1678,3 +1678,16 @@ layout: default
      numna <- numnas <- numNA <- numNAs <- function(x) sum(is.na(x))
      classes <- function(x) paste(class(x), collapse=", ")
      ```
+
+105. Padded numbers are often useful for creating unique IDs in geospatial related tasks. This function simplifies creating
+     padded numbers instead of having to manually calculate them.
+
+     ```r
+     paddedNumbers <- function(nums) {
+         ## paddedNumbers(c(1,19,101,1010,10283)) returns c("00001","00019","00101","01010","10283")
+         stopifnot(all(nums > 0))
+         width <- nchar(as.character(max(nums)))
+         fmt <- sprintf("%%0%dd")
+         sprintf(fmt, nums)
+     }
+     ```
