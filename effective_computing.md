@@ -32,7 +32,7 @@ These are the software tools/packages (emphasized ones more frequently than alte
 # General guidelines
 
 1. All dates/times should be in ISO-8601 format. I.e., dates should be represented as `YYYY.MM.DD`, `YYYYMMDD`, or `YYYY/MM/DD` and time should be represented as `HHMMSS` or `HH:MM:SS`.
-1. If there is a possibility of confusion of timezone, the time should be, preferably, in UTC timezone or include the local time zone offset.  See the explanation on the [http://www.iso.org/iso/date_and_time_format](ISO page).
+1. If there is a possibility of confusion of timezone, the time should be, preferably, in UTC timezone or include the local time zone offset.  See the explanation on the [ISO page](http://www.iso.org/iso/date_and_time_format).
 1. Filenames should comprise of alphanumeric characters and underscores.  Try to avoid special characters, spaces, and punctuation as a part of filename.
 1. Filenames should contain enough context information that is independent of folder structure.
 
