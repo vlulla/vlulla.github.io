@@ -1630,6 +1630,16 @@ layout: default
 
      R> lsos()
      ```
+
+     An added advantage of `lsos` is that it can be particularly useful for
+     examining lists and environments. Check this out in your console:
+
+     ```r
+     R> lsos(mtcars)
+     R> lsos(environment(par))
+     R> lsos(getS3method("[","data.table"))
+     ```
+
 103. DE-9IM representations of the various spatial predicates:
 
      ```
