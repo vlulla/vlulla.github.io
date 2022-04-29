@@ -335,10 +335,10 @@ layout: default
      How do we know that it contains more information?  Simple, we saw it
      printed when we examined the model object!!
 
- 27. While using data.table don't use %in% or match when you want to
-     search/subset by some character string matching.  While it will not
-     raise errors it is unclear when this will or won't work!  Use
-     `chmatch` or `%chin%` instead!  See ?chmatch for more information.
+ 27. While using data.table don't use `%in%` or `match` when you want to
+     search/subset by some character string matching.  While these functions will not
+     raise errors it is unclear whether these functions will, or won't, work!  Use
+     `chmatch` or `%chin%` instead!  See `?chmatch` for more information.
 
  28. You can attach a saved object.  Learned this from Martin Maechler's talk
      (slide 28 found on
@@ -364,7 +364,7 @@ layout: default
 
      Also, check out `cospi`, `sinpi`, and `tanpi`.  `` ?`cospi` ``
 
- 30. Use on.exit to ensure execution of an extension at the exit of a function
+ 30. Use `on.exit` to ensure execution of an extension at the exit of a function
      (normally or on error).
 
      ```r
@@ -1625,7 +1625,7 @@ layout: default
          out <- head(out, n)
 
        gc() ## This function uses a lot of memory! Free it before exiting.
-       return(as.data.table(out, keep.rownames="ID"))
+       return(out)
      }
 
      R> lsos()
@@ -1667,7 +1667,7 @@ layout: default
        colidx <- seq_along(DF)
        num_nas <- sapply(DF, numna)
        num_uniq <- sapply(DF, num_unique)
-       data.table(ColName=colnames, ColClasses=colclasses, ColIdx=colidx, NumNA=num_nas, PctNA=round(100*num_nas/nrow(DF),2), NumUniq=num_uniq, PctUniq=round(100*num_uniq/nrow(DF),3), row.names=NULL)
+       data.frame(ColName=colnames, ColClasses=colclasses, ColIdx=colidx, NumNA=num_nas, pctNA=round(100*num_nas/nrow(DF),2), NumUniq=num_uniq, PctUniq=round(100*num_uniq/nrow(DF),3), row.names=NULL)
      }
      R> colDetails(mtcars)
      ```
@@ -1687,7 +1687,7 @@ layout: default
          ## paddedNumbers(c(1,19,101,1010,10283)) returns c("00001","00019","00101","01010","10283")
          stopifnot(all(nums > 0))
          width <- nchar(as.character(max(nums)))
-         fmt <- sprintf("%%0%dd")
+         fmt <- sprintf("%%0%dd",width)
          sprintf(fmt, nums)
      }
      ```
