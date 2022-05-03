@@ -1549,7 +1549,7 @@ layout: default
     }
     R> # Try this to see the usefulness of this little function!
     R> weird_colnames <- c(" with spaces ", "| with strange' punctuation |", "with-hyphens!", "with(parenthesis)",
-         "0 with leading numbers", "99 more leading numbers","But Case Sensitive!")
+         "0 with leading numbers", "99 more leading numbers","But numbers 99 inside are okay!", "And, Case Sensitive!")
     R> d <- data.table(weird_colnames=weird_colnames)
     R> d[ , `:=`(fixed_colnames = fixcolnames(weird_colnames))]
     R> d
