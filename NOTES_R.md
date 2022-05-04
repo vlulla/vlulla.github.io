@@ -1545,11 +1545,14 @@ layout: default
       ## Very useful for GIS related work!!!!
 
       f <- ifelse(lowercase, tolower, identity)
-      gsub("^([0-9]+)?_|_$", "", f(gsub("[^A-Za-z0-9]+", "_", as.character(x))))
+      res <- gsub("^(_?[0-9]+)?_|_$", "", f(gsub("[^A-Za-z0-9]+", "_", as.character(x))))
+      ifelse(res == "", "V1", res)
     }
     R> # Try this to see the usefulness of this little function!
     R> weird_colnames <- c(" with spaces ", "| with strange' punctuation |", "with-hyphens!", "with(parenthesis)",
-         "0 with leading numbers", "99 more leading numbers","But numbers 99 inside are okay!", "And, Case Sensitive!")
+         "0 with leading numbers", "99 more leading numbers","But numbers 99 inside are okay!",
+         "  99 numbers and beginning spaces is tricky!", "Overall, Case Sensitive!",
+         "") ## Caught the last one and leading spaces with numbers case by using PBT (hypothesis is excellent!!)
     R> d <- data.table(weird_colnames=weird_colnames)
     R> d[ , `:=`(fixed_colnames = fixcolnames(weird_colnames))]
     R> d
