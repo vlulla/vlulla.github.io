@@ -17,14 +17,14 @@ and a macbook for most of my personal stuff.
 These are the software tools/packages (emphasized ones more frequently than alternatives) that I use most frequently:
 
 1. **vim**/gvim and emacs.
-1. **R** [my R related notes](NOTES_R), **NumPy/SciPy**, **J**, **Julia**, and **Factor**.
+1. **R** [my R related notes](NOTES_R), **NumPy/SciPy**, **J**, Julia, and Factor.
 1. **NetLogo**, and GAMA.
-1. **Python**, **OCaml**, **Haskell**, Scala, Lua, CLisp,   ruby, Clojure, and sometimes Perl
-1. **PostgreSQL+PostGIS**, and **SQLite**.
-1. ENVI, ERDAS Imagine, **Maptitude**, and **ArcGIS**/ArcGIS Pro.
-1. **JabRef**, and ~~EndNote~~ Zotero (for bibliography management).
+1. **Python**, OCaml, Haskell, **Scala**, Lua, CLisp, ruby, Clojure, and sometimes Perl.
+1. **PostgreSQL+PostGIS**, **SQLite**, Duckdb, Spark-SQL.
+1. ENVI, ERDAS Imagine, **MultiSpec**, **Maptitude**, **QGIS**, and ArcGIS/ArcGIS Pro.
+1. JabRef, and ~~EndNote~~ **Zotero** (for bibliography management).
 1. **Markdown (pandoc)**, LaTeX (MikTeX), and MS Office whenever I cannot get away with it!
-1. Git.
+1. **Git**.
 1. Paint.NET, Inkscape.
 
 **NOTE:** I'm willing to answer questions about any of these tools (provided I know the answer)!
@@ -50,10 +50,11 @@ These are the software tools/packages (emphasized ones more frequently than alte
 1. All tables should have **PRIMARY KEY**.
 1. Create a schema, named as the username used to login, after a `createdb`. Command (assuming username is 'vijay'): `CREATE SCHEMA vijay;` This makes porting data (during update/migration) much easier.
 1. Default `DateStyle` is set to `ISO, MDY`. Change it to `ISO, YMD`. Command: `SET DateStyle = 'ISO, YMD';`
-1. Always store `timestamp with time zone` (or `timestamptz`). This internally stores timestamp in UTC which gets displayed based on session timezone!
+1. Always store `timestamp with time zone` (or `timestamptz`). This internally stores timestamp in UTC which gets displayed based on current session timezone setting!
 1. PostgreSQL allows DDL in `BEGIN-COMMIT/ROLLBACK` transaction blocks.  ALWAYS USE TRANSACTIONS!
 1. Use `AS` when defining column/table aliases even though it is optional.  This simplifies writing queries.
 1. Try to save the schema/table creation commands in a separate SQL script.  This will be useful in the future when you need to create the tables without the data. Also, you can version control this script!
+1. Set the configuration variables `plpgsql.extra_warnings` and `plgpgsql.extra_errors` to 'all'. Command: `SET plpgsql.extra_warnings TO 'all'; SET plpgsql.extra_errors TO 'all';`
 
 ## GIS related
 
