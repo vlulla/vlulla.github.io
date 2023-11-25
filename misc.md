@@ -17,19 +17,19 @@ layout: default
 
 ### Some speeches/essays/letters that I like
 - [Cargo cult science](http://calteches.library.caltech.edu/51/2/CargoCult.htm) by Richard Feynman.
-- [Ten lessons I wish I had been taught](http://alumni.media.mit.edu/~cahn/life/gian-carlo-rota-10-lessons.html) by Gian-Carlo Rota.
+- [Ten lessons I wish I had been taught](https://www.ams.org/notices/199701/comm-rota.pdf) by Gian-Carlo Rota.
 - [You and Your Research](http://www.cs.virginia.edu/~robins/YouAndYourResearch.html) by Richard Hamming
-- [The bulk of all human utterances is plagiarism](http://www.lettersofnote.com/2012/05/bulk-of-all-human-utterances-is.html) Mark Twain's letter to Helen Keller.
+- [The bulk of all human utterances is plagiarism](https://web.archive.org/web/20190305033639/http://www.lettersofnote.com/2012/05/bulk-of-all-human-utterances-is.html) Mark Twain's letter to Helen Keller.
 - [Politics and the english language](https://www.orwell.ru/library/essays/politics/english/e_polit) by George Orwell.
 - [How to write with style](http://peterstekel.com/PDF-HTML/Kurt%20Vonnegut%20advice%20to%20writers.htm) by Kurt Vonnegut.
 - [Richard von Weizsacker's speech.](http://www.hariguchi.org/yoichi/weizsaecker.html)
 - [My speech to the Graduages](http://norvig.com/speech.html) by Peter Norvig.
 - [What should I do with my life?](http://www.fastcompany.com/45909/what-should-i-do-my-life) by Po Bronson.
 - [Warning Signs in Experimental Design and Interpretation](http://norvig.com/experiment-design.html) by Peter Norvig.
-- [Some tips](http://www.umich.edu/~bhlumrec/c/commence/1988-Brodsky.pdf) Joseph Brodsky's commencement speech at University of Michigan in 1988.
-- [Kenyon College commencement speech 2005](http://moreintelligentlife.com/story/david-foster-wallace-in-his-own-words) by David Foster Wallace.
+- [Some tips](http://web.archive.org/web/20140612143017/http://www.umich.edu/~bhlumrec/c/commence/1988-Brodsky.pdf) Joseph Brodsky's commencemet speech at University of Michigan in 1988.
+- [Kenyon College commencement speech 2005](https://web.archive.org/web/20100219193516/http://moreintelligentlife.com/story/david-foster-wallace-in-his-own-words) by David Foster Wallace.
 - [Following Benford's Law, or Looking Out for No. 1](http://www.rexswain.com/benford.html) by Malcolm W. Browne. A good explanation of Benford's law.
-- [Wonderful letter discussing a suggested idiosyncratic reform.](http://www.lettersofnote.com/2012/05/iorz-feixfuli-m-j-yilz.html) -- Source (<http://www.lettersofnote.com/>)
+- [Wonderful letter discussing a suggested idiosyncratic reform.](https://web.archive.org/web/20200311221105/http://www.lettersofnote.com/2012/05/iorz-feixfuli-m-j-yilz.html) -- Source (<http://www.lettersofnote.com/>)
 - [Letter correspondence between a parent and the eminent physicst Richard Feynman.](https://yla.svbtle.com/letter-of-rpf-1)
 - [Professor Albert Bartlett's video explaining why "Sustainable Growth" is a contradiction.](http://www.youtube.com/watch?v=F-QA2rkpBSY)
 - [Wisdom of the Stoics](http://www.mises.ch/library/Hazlitt_Wisdom_of_the_Stoics.pdf) by Henry Hazlitt.
