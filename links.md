@@ -14,7 +14,6 @@ title: "Miscellaneous"
 - [Learn Python the hard way](http://learnpythonthehardway.org/book/) --- Zed Shaw
 
 ### Statistics/R related
-- <http://www.statsoft.com/Textbook/> (Statsoft)
 - [Statistical Analysis Handbook](http://www.statsref.com/HTML/index.html) by Dr. M J de Smith
 - [Probability and statistics EBook](http://wiki.stat.ucla.edu/socr/index.php/EBook) (by UCLA statistics department)
 - [Think Bayes](https://greenteapress.com/wp/think-bayes/) by Allen B. Downey
