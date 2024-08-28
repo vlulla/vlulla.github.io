@@ -16,7 +16,7 @@ some of the links that I find useful.
 - [Hadley Wickham's pages related to R and other statistics courses he teaches](http://hadley.nz/)
 - [Advanced R](http://adv-r.hadley.nz/) -- by Hadley Wickham (a very useful resource!)
 - [Geographic Data Analysis Using R](http://geog.uoregon.edu/geogr/)
-- [How R Searches and Finds Stuff](http://obeautifulcode.com/R/How-R-Searches-And-Finds-Stuff/) -- very useful!!
+- [How R Searches and Finds Stuff](https://blog.thatbuthow.com/how-r-searches-and-finds-stuff/) -- very useful
 - [My R related notes](NOTES_R.md)
 - [My R related utils developed over the years](vl_utils.R)
 
