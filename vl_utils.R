@@ -582,7 +582,16 @@ generate_random_date_range <- function(start_date=as.Date('2000-01-01'), end_dat
   ##
   ## R> generate_random_date_range(as.Date('2000-01-01'),as.Date('2022-12-31'), 30L)
   ## R> generate_random_date_range(as.Date('2000-01-01'),as.Date('2022-12-31'), as.integer(sample(365,1))) ## much more useful...imo
-  ## R> generate_random_date_range(as.Date('2000-01-01'),as.Date('2022-12-31'), as.integer(sample(c(365,366),1,prob=c(3/4,1/4)))) ## even more interesting
-  stopifnot(class(start_date)==class(Sys.Date()), class(end_date)==class(Sys.Date()), is.integer(num_days), end_date > start_date, end_date - start_date >= num_days)
-  with(list(start_dt=sample(seq(start_dt,end_date-num_days,by='1 day'),1)),seq(start_dt, start_dt+num_days-1,by='1 day'))
+  ## R> generate_random_date_range(as.Date('2000-01-01'),as.Date('2022-12-31'), as.integer(sample(c(365,366),1,prob=c(3/4,1/4)))) ## even more interesting!
+  ##
+  stopifnot(class(start_date)==class(Sys.Date()), class(end_date)==class(Sys.Date()), is.integer(num_days),
+     end_date > start_date, end_date - start_date >= num_days)
+  with(list(start_dt=sample(seq(start_date, end_date - num_days, by='1 day'),1)),seq(start_dt, start_dt+num_days-1,by='1 day'))
+}
+
+gcp_to_DT <- function(qry, project, params=list()) {
+  ## TODO (vijay): figure out how to run bq_perform_query. See https://github.com/r-dbi/bigrquery/blob/HEAD/R/bq-perform.R
+  tb <- bq_project_query(project,qry) ## require('bigrquery')
+  DT <- as.data.table(bq_table_download(tb,bigint="integer64")) ## ensure that you use `fill=bit64::as.integer64(NA)` in `dcast.data.table`!
+  DT
 }

@@ -1718,3 +1718,7 @@ layout: default
        with(list(start_dt=sample(seq(start_date, end_date - num_days, by='1 day'),1)),seq(start_dt, start_dt+num_days-1,by='1 day'))
      }
      ```
+
+107. If a data.table contains integer64 the `dcast.data.table` will insert really large values for any cell that ought to receive `NA` values.
+     From reading the issue <https://github.com/Rdatatable/data.table/issues/4561> it appears that this is a rather common occurrence. The comments in that
+     thread describe the solution: use `fill=bit64::as.integer64(NA)` in the `dcast.data.table` call.
