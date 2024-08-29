@@ -274,11 +274,13 @@ lsos <- lsobjs <- .ls.objects  <- function(pos=1L, pattern, order.by, decreasing
   ##
   ## Modified to sort correctly based on size! There's a subtle bug in the SO answer
 
+  classes <- function(x) paste(class(x), collapse=", ")
   napply <- function(names, fn) sapply(names, function(x) fn(get(x, pos=pos)))
   names <- ls(pos=pos, pattern=pattern)
   if(length(names) == 0L) return(character(0))
 
-  obj.class <- napply(names, function(x) as.character(class(x))[[1]])
+  ## obj.class <- napply(names, function(x) as.character(class(x))[[1]])
+  obj.class <- napply(names, classes)
   obj.mode <- napply(names, base::mode)
   obj.type <- ifelse(is.na(obj.class), obj.mode, obj.class)
   obj.size <- napply(names, function(x) {
@@ -290,7 +292,7 @@ lsos <- lsobjs <- .ls.objects  <- function(pos=1L, pattern, order.by, decreasing
   obj.dim[vec, 1] <- napply(names, length)[vec]
 
   out <- data.frame(obj.type, obj.size, obj.dim)
-  names(out) <- c("Type", "Size", "Rows", "Columns")
+  names(out) <- c("Type/Class", "Size", "Rows", "Columns")
 
   if(any(obj.type %in% c("RasterStack", "RasterBrick", "SpatRaster"))) {
     nlayers <- function(x) ifelse(inherits(x, c("RasterStack", "RasterBrick")),
@@ -327,7 +329,27 @@ colDetails <- function(DF) {
   colidx <- seq_along(DF)
   num_nas <- sapply(DF, numna)
   num_uniq <- sapply(DF, num_unique)
-  data.table(ColName=colnames, ColClasses=colclasses, ColIdx=colidx, NumNA=num_nas, PctNA=round(100*num_nas/nrow(DF),2), NumUniq=num_uniq, PctUniq=round(100*num_uniq/nrow(DF),3), row.names=NULL)
+  DFM <- copy(DF)
+  for(i in seq_len(ncol(DF))) {
+    if(class(DF[[i]]) %in% c("factor","character")) { DFM[[i]] <- as.numeric(rep(NA,nrow(DFM))) }
+  }
+  colstats <- function(x, na.rm=TRUE, digits=3L) {
+    ## idea from McElreath's rethinking::precis function
+    stats <- if(is.numeric(x)) {
+      c(round(mean(x,na.rm=na.rm),digits=digits), round(sd(x,na.rm=na.rm),digits=digits), round(quantile(x,probs=c(0.055,0.945)),digits=digits))
+    } else {
+      c(NA, NA, NA, NA)
+    }
+    names(stats) <- c("mean","sd","5.5%","94.5%")
+    stats
+  }
+  ## stats <- t(apply(DF,2,colstats))
+  stats <- do.call(rbind, lapply(DF, colstats))
+  histosparks <- sapply(DFM, histospark) ## see below for histospark
+  DD <- data.table(ColName=colnames, ColClasses=colclasses, ColIdx=colidx, NumNA=num_nas, PctNA=round(100*num_nas/nrow(DF),3), NumUniq=num_uniq, PctUniq=round(100*num_uniq/nrow(DF),3), row.names=NULL)
+  DD <- cbind(DD, stats)
+  DD[,Histogram:=histosparks]
+  DD[]
 }
 
 issorted <- function(x) all(order(x) == seq_along(x))
@@ -594,4 +616,17 @@ gcp_to_DT <- function(qry, project, params=list()) {
   tb <- bq_project_query(project,qry) ## require('bigrquery')
   DT <- as.data.table(bq_table_download(tb,bigint="integer64")) ## ensure that you use `fill=bit64::as.integer64(NA)` in `dcast.data.table`!
   DT
+}
+
+## especially useful for install.packages("pkg",lib=lastElem(.libPaths()))
+lastElem <- lastelem <- function(l)l[[length(l)]]
+
+## Learned of this from Richard McElreath's book.
+## Found this on https://github.com/hadley/precis/blob/master/R/histospark.R
+histospark <- function(x, width=10L) {
+  if(all(is.na(x))){return("")}
+  sparks <- c("\u2581","\u2582","\u2583",'\u2585','\u2587')
+  bins <- graphics::hist(x, breaks=width, plot=FALSE)
+  factor <- cut(bins$counts / max(bins$counts), breaks=seq(0L,1L,length=length(sparks)+1L),labels=sparks,include.lowest=TRUE)
+  paste0(factor,collapse="")
 }

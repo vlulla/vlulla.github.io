@@ -1671,17 +1671,37 @@ layout: default
 104. Column details:
 
      ```r
-     ## Column Details for a Data Frame
-     ## ^^^    ^^^^^^^       ^    ^
-     colDetails <- function(DF) {
-       stopifnot("Needs a data.frame or data.table" = inherits(DF, "data.frame"))
-       colnames <- colnames(DF)
-       colclasses <- sapply(DF, classes)
-       colidx <- seq_along(DF)
-       num_nas <- sapply(DF, numna)
-       num_uniq <- sapply(DF, num_unique)
-       data.frame(ColName=colnames, ColClasses=colclasses, ColIdx=colidx, NumNA=num_nas, pctNA=round(100*num_nas/nrow(DF),2), NumUniq=num_uniq, PctUniq=round(100*num_uniq/nrow(DF),3), row.names=NULL)
-     }
+	 ## Column Details for a Data Frame
+	 ## ^^^    ^^^^^^^       ^    ^
+	 colDetails <- function(DF) {
+	   stopifnot("Needs a data.frame or data.table" = inherits(DF, "data.frame"))
+	   colnames <- colnames(DF)
+	   colclasses <- sapply(DF, classes)
+	   colidx <- seq_along(DF)
+	   num_nas <- sapply(DF, numna)
+	   num_uniq <- sapply(DF, num_unique)
+	   DFM <- copy(DF)
+	   for(i in seq_len(ncol(DF))) {
+	 	if(class(DF[[i]]) %in% c("factor","character")) { DFM[[i]] <- as.numeric(rep(NA,nrow(DFM))) }
+	   }
+	   colstats <- function(x, na.rm=TRUE, digits=3L) {
+	 	## idea from McElreath's rethinking::precis function
+	 	stats <- if(is.numeric(x)) {
+	 	  c(round(mean(x,na.rm=na.rm),digits=digits), round(sd(x,na.rm=na.rm),digits=digits), round(quantile(x,probs=c(0.055,0.945)),digits=digits))
+	 	} else {
+	 	  c(NA, NA, NA, NA)
+	 	}
+	 	names(stats) <- c("mean","sd","5.5%","94.5%")
+	 	stats
+	   }
+	   ## stats <- t(apply(DF,2,colstats))
+	   stats <- do.call(rbind, lapply(DF, colstats))
+	   histosparks <- sapply(DFM, histospark) ## see below for histospark
+	   DD <- data.table(ColName=colnames, ColClasses=colclasses, ColIdx=colidx, NumNA=num_nas, PctNA=round(100*num_nas/nrow(DF),3), NumUniq=num_uniq, PctUniq=round(100*num_uniq/nrow(DF),3), row.names=NULL)
+	   DD <- cbind(DD, stats)
+	   DD[,Histogram:=histosparks]
+	   DD[]
+	 }
      R> colDetails(mtcars)
      ```
 
