@@ -107,7 +107,7 @@ layout: default
     exact match!
 
     ```r
-    R> ?`[[`  
+    R> ?`[[`
     R> ?'[['   ## also works!
     ```
 
@@ -312,8 +312,8 @@ layout: default
 
      And use the **`L`** suffix especially for *indexing*/*subsetting*.
 
- 25. `#define USE_RINTERNALS` before `#include <Rinternals.h>` is needed to gain 
-     direct access to internals of SEXPRECS.  See last paragraph of section 1.7 
+ 25. `#define USE_RINTERNALS` before `#include <Rinternals.h>` is needed to gain
+     direct access to internals of SEXPRECS.  See last paragraph of section 1.7
      of R Internals.
 
  26. R objects can contain a lot of information.  Use `class`, `str`, and
@@ -494,7 +494,7 @@ layout: default
      '"POSIXct"' to character vectors.  `strptime` converts character vectors
      to clas '"POSIXlt"'.  See `?format` or `?strftime` .
 
-     Mnemonic:  
+     Mnemonic:
       - strptime  <==> string parse time  i.e. character -> date/time class
       - strftime  <==> string format time  i.e. date/time -> character
 
@@ -1303,7 +1303,7 @@ layout: default
 92. R's type hierarchy:
       NULL < raw < logical < integer < double < complex < character < list < expression
 
-93. Here are a couple of very useful frequency functions! I got this idea from 
+93. Here are a couple of very useful frequency functions! I got this idea from
     <https://st2.ning.com/topology/rest/1.0/file/get/4077505910?profile=original>
 
     ```r
@@ -1325,13 +1325,13 @@ layout: default
         for(i in seq_len(nmlen)) {
             freqs <- freqsdt(DT, c(nms[i]))
             if(nrow(freqs) <= catlim) {
-                final <- rbind(final, 
+                final <- rbind(final,
                                data.table(vname=nms[i],value=as.factor(freqs[[1]]),
                                           frequency=freqs[[2]], percent=freqs[[3]]))
             }
         }
         final
-    } 
+    }
     ```
 
     And you use them like so:
@@ -1379,7 +1379,7 @@ layout: default
 95. Generate a random filename.
 
     ```r
-    generate_random_filename <- genrandfilename <- 
+    generate_random_filename <- genrandfilename <-
       function(minlen=5L,maxlen=20L,filechars=paste0(c(letters,LETTERS,0:9),collapse=""),extensions=c("pdf","exe","txt","md","xls","doc","xlsx","dat","csv","shp","prj"),allowspaces=FALSE) {
         stopifnot(is.integer(minlen), is.integer(maxlen), minlen > 0L, maxlen > 0L, maxlen >= minlen)
         stopifnot(isTRUE(allowspaces) || isFALSE(allowspaces), is.character(filechars), is.character(extensions))
@@ -1450,24 +1450,24 @@ layout: default
     ```
 
 97. I have often felt the need to shuffle the input for my
-	functions/algorithms to ensure that they are not relying on the  ordering
-	of data. For instance, when I'm first writing a function which takes
-	a sequence as input, I'll use a simple sequence like `seq.int(1L, 10L)` as
-	input to get the function working. And, once the function is ready I'll
-	start using it. And, as I continue to use this function/algo I will notice
-	that when the input is not ordered (or simple) I often get results that
-	don't make sense. And, this is usually the result of using simple vectors
-	for testing when designing the function initially. As my understanding
-	improves and I realize the unstated, but definitely present, assumption
-	that I had made while writing the function I will have to try to fix the
-	function with _shuffled_ vectors. And, this function is an attempt to
-	create permutations of an input `vector` or `data.frame` which can be used
-	to shuffle these collections which can then be used as argument[s] for
-	function. So, for instance if I had 
-	`mymean <- function(x) { sum(x)/length(x) }` 
-	then I would check it like this
-	`lapply(permutations(1:15,n=20), mymean)` to ensure that I get the same
-	result for all the permutations!
+    functions/algorithms to ensure that they are not relying on the  ordering
+    of data. For instance, when I'm first writing a function which takes
+    a sequence as input, I'll use a simple sequence like `seq.int(1L, 10L)` as
+    input to get the function working. And, once the function is ready I'll
+    start using it. And, as I continue to use this function/algo I will notice
+    that when the input is not ordered (or simple) I often get results that
+    don't make sense. And, this is usually the result of using simple vectors
+    for testing when designing the function initially. As my understanding
+    improves and I realize the unstated, but definitely present, assumption
+    that I had made while writing the function I will have to try to fix the
+    function with _shuffled_ vectors. And, this function is an attempt to
+    create permutations of an input `vector` or `data.frame` which can be used
+    to shuffle these collections which can then be used as argument[s] for
+    function. So, for instance if I had
+    `mymean <- function(x) { sum(x)/length(x) }`
+    then I would check it like this
+    `lapply(permutations(1:15,n=20), mymean)` to ensure that I get the same
+    result for all the permutations!
 
     ```r
     permutations <- function(x, n=6L) {
@@ -1502,39 +1502,39 @@ layout: default
       }
       res
     }
-	```
+    ```
 
 98. When using R interactively I have often found the need to modify some
-	`options` or `par` settings for a particular piece of code snippet which
-	needs to be reverted back after the code snippet is done. This can be
-	accomplished by writing a function which uses `on.exit`. This was explained
-	by Patrick Burns at
-	<https://www.burns-stat.com/the-options-mechanism-in-r/>
+    `options` or `par` settings for a particular piece of code snippet which
+    needs to be reverted back after the code snippet is done. This can be
+    accomplished by writing a function which uses `on.exit`. This was explained
+    by Patrick Burns at
+    <https://www.burns-stat.com/the-options-mechanism-in-r/>
 
-	```r
-	withOptions <- function(optlist, expr) {
-		opts <- options(optlist)
-		on.exit(options(opts))
-		expr <- substitute(expr)
-		eval.parent(expr)
-	}
-	R> print((1:10)^-1)
-	R> withOptions(list(digits=3),print((1:10)^-1))
-	```
+    ```r
+    withOptions <- function(optlist, expr) {
+        opts <- options(optlist)
+        on.exit(options(opts))
+        expr <- substitute(expr)
+        eval.parent(expr)
+    }
+    R> print((1:10)^-1)
+    R> withOptions(list(digits=3),print((1:10)^-1))
+    ```
 
-	And we can do the same thing for `par` too! And, in my opinion, it is
-	a whole lot more helpful with `par` than it is with `options`.
+    And we can do the same thing for `par` too! And, in my opinion, it is
+    a whole lot more helpful with `par` than it is with `options`.
 
-	```r
-	withPars <- function(parlist, expr) {
-		opar <- par(parlist)
-		on.exit(par(opar))
-		expr <- substitute(expr)
-		eval.parent(expr)
-	}
-	R> plot(mtcars$mpg, mtcars$disp)
-	R> withPars(list(mar=c(1,1,1,1)), plot(mtcars$mpg, mtcars$disp))
-	```
+    ```r
+    withPars <- function(parlist, expr) {
+        opar <- par(parlist)
+        on.exit(par(opar))
+        expr <- substitute(expr)
+        eval.parent(expr)
+    }
+    R> plot(mtcars$mpg, mtcars$disp)
+    R> withPars(list(mar=c(1,1,1,1)), plot(mtcars$mpg, mtcars$disp))
+    ```
 
 99. It is often required to fix column names for GIS related work. The below
     function tries to fix column names that are likely to work in GIS softwares.
@@ -1671,37 +1671,37 @@ layout: default
 104. Column details:
 
      ```r
-	 ## Column Details for a Data Frame
-	 ## ^^^    ^^^^^^^       ^    ^
-	 colDetails <- function(DF) {
-	   stopifnot("Needs a data.frame or data.table" = inherits(DF, "data.frame"))
-	   colnames <- colnames(DF)
-	   colclasses <- sapply(DF, classes)
-	   colidx <- seq_along(DF)
-	   num_nas <- sapply(DF, numna)
-	   num_uniq <- sapply(DF, num_unique)
-	   DFM <- copy(DF)
-	   for(i in seq_len(ncol(DF))) {
-	 	if(class(DF[[i]]) %in% c("factor","character")) { DFM[[i]] <- as.numeric(rep(NA,nrow(DFM))) }
-	   }
-	   colstats <- function(x, na.rm=TRUE, digits=3L) {
-	 	## idea from McElreath's rethinking::precis function
-	 	stats <- if(is.numeric(x)) {
-	 	  c(round(mean(x,na.rm=na.rm),digits=digits), round(sd(x,na.rm=na.rm),digits=digits), round(quantile(x,probs=c(0.055,0.945)),digits=digits))
-	 	} else {
-	 	  c(NA, NA, NA, NA)
-	 	}
-	 	names(stats) <- c("mean","sd","5.5%","94.5%")
-	 	stats
-	   }
-	   ## stats <- t(apply(DF,2,colstats))
-	   stats <- do.call(rbind, lapply(DF, colstats))
-	   histosparks <- sapply(DFM, histospark) ## see below for histospark
-	   DD <- data.table(ColName=colnames, ColClasses=colclasses, ColIdx=colidx, NumNA=num_nas, PctNA=round(100*num_nas/nrow(DF),3), NumUniq=num_uniq, PctUniq=round(100*num_uniq/nrow(DF),3), row.names=NULL)
-	   DD <- cbind(DD, stats)
-	   DD[,Histogram:=histosparks]
-	   DD[]
-	 }
+     ## Column Details for a Data Frame
+     ## ^^^    ^^^^^^^       ^    ^
+     colDetails <- function(DF) {
+       stopifnot("Needs a data.frame or data.table" = inherits(DF, "data.frame"))
+       colnames <- colnames(DF)
+       colclasses <- sapply(DF, classes)
+       colidx <- seq_along(DF)
+       num_nas <- sapply(DF, numna)
+       num_uniq <- sapply(DF, num_unique)
+       DFM <- copy(DF)
+       for(i in seq_len(ncol(DF))) {
+        if(class(DF[[i]]) %in% c("factor","character")) { DFM[[i]] <- as.numeric(rep(NA,nrow(DFM))) }
+       }
+       colstats <- function(x, na.rm=TRUE, digits=3L) {
+        ## idea from McElreath's rethinking::precis function
+        stats <- if(is.numeric(x)) {
+          c(round(mean(x,na.rm=na.rm),digits=digits), round(sd(x,na.rm=na.rm),digits=digits), round(quantile(x,probs=c(0.055,0.945)),digits=digits))
+        } else {
+          c(NA, NA, NA, NA)
+        }
+        names(stats) <- c("mean","sd","5.5%","94.5%")
+        stats
+       }
+       ## stats <- t(apply(DF,2,colstats))
+       stats <- do.call(rbind, lapply(DF, colstats))
+       histosparks <- sapply(DFM, histospark) ## see below for histospark
+       DD <- data.table(ColName=colnames, ColClasses=colclasses, ColIdx=colidx, NumNA=num_nas, PctNA=round(100*num_nas/nrow(DF),3), NumUniq=num_uniq, PctUniq=round(100*num_uniq/nrow(DF),3), row.names=NULL)
+       DD <- cbind(DD, stats)
+       DD[,Histogram:=histosparks]
+       DD[]
+     }
      R> colDetails(mtcars)
      ```
 
