@@ -1710,6 +1710,14 @@ layout: default
      ```r
      numna <- numnas <- numNA <- numNAs <- function(x) sum(is.na(x))
      classes <- function(x) paste(class(x), collapse=", ")
+	 histospark <- function(x, width=10L) {
+	   if(all(is.na(x))){return("")}
+	   if(is.integer64(x)){ x <- as.numeric(x) }
+	   sparks <- c("\u2581","\u2582","\u2583","\u2585","\u2587")
+	   bins <- graphics::hist(x, breaks=width, plot=FALSE)
+	   factor <- cut(bins$counts / max(gins$counts), breaks=seq(0L,1L,length=length(sparks)+1L),labels=sparks,include.lowest=TRUE)
+	   paste0(factor,collapse="")
+	 }
      ```
 
 105. Padded numbers are often useful for creating unique IDs in geospatial related tasks. This function simplifies creating
