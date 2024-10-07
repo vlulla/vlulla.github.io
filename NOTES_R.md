@@ -1710,14 +1710,14 @@ layout: default
      ```r
      numna <- numnas <- numNA <- numNAs <- function(x) sum(is.na(x))
      classes <- function(x) paste(class(x), collapse=", ")
-	 histospark <- function(x, width=10L) {
-	   if(all(is.na(x))){return("")}
-	   if(is.integer64(x)){ x <- as.numeric(x) }
-	   sparks <- c("\u2581","\u2582","\u2583","\u2585","\u2587")
-	   bins <- graphics::hist(x, breaks=width, plot=FALSE)
-	   factor <- cut(bins$counts / max(gins$counts), breaks=seq(0L,1L,length=length(sparks)+1L),labels=sparks,include.lowest=TRUE)
-	   paste0(factor,collapse="")
-	 }
+     histospark <- function(x, width=10L) {
+       if(all(is.na(x))){return("")}
+       if(is.integer64(x)){ x <- as.numeric(x) }
+       sparks <- c("\u2581","\u2582","\u2583","\u2585","\u2587")
+       bins <- graphics::hist(x, breaks=width, plot=FALSE)
+       factor <- cut(bins$counts / max(gins$counts), breaks=seq(0L,1L,length=length(sparks)+1L),labels=sparks,include.lowest=TRUE)
+       paste0(factor,collapse="")
+     }
      ```
 
 105. Padded numbers are often useful for creating unique IDs in geospatial related tasks. This function simplifies creating
@@ -1750,3 +1750,21 @@ layout: default
 107. If a data.table contains integer64 the `dcast.data.table` will insert really large values for any cell that ought to receive `NA` values.
      From reading the issue <https://github.com/Rdatatable/data.table/issues/4561> it appears that this is a rather common occurrence. The comments in that
      thread describe the solution: use `fill=bit64::as.integer64(NA)` in the `dcast.data.table` call.
+
+108. List all objects in all environments.
+
+     ```r
+     getAllObjects <- function() {
+       ## This can be used to determine where the object is coming from...
+       ##
+       ## I stumbled upon this when trying to figure out how to get `colSums` to work with `integer64`. I learned that `colSums` is definedin `package:Matrix` as well as `package:base`.
+       ## This is also evident when you do `?colSums` where R will ask you which function documentation you wish to read.
+       envs <- search()
+       getObjects <- function(env) {
+        objs <- ls(name=env)
+        searchIdx <- which(env==search())
+        data.table(searchidx=searchIdx,env=env,obj=objs,obj_type=sapply(objs,function(s)typeof(get(s,env))))
+       }
+       rbindlist(lapply(envs,getObjects))
+     }
+     ```
