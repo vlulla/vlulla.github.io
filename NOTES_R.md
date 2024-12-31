@@ -1768,3 +1768,23 @@ layout: default
        rbindlist(lapply(envs,getObjects))
      }
      ```
+
+109. Example of applying a function recursively to a list using `rapply`:
+
+     ```R
+     ## Slightly ammended list from the example shown in ?rapply
+     X <- list(list(a = pi, b = list(c = 2L)), d = "a test", e=as.Date(c('2024-01-01','2024-12-31')))
+
+     ## does not descend into X[[1]][["b"]] to take sqrt of X[[1]][["b"]][["c"]]
+     rapply(X, sqrt, classes="numeric", how="replace") ## skips descending into X[[1]][["b"]] because class(X[[1]][["b"]]) is a "list"!
+
+     rapply(X, function(n){ if(is.numeric(n)){sqrt(n)}else{identity(n)}}, how="replace") ## Use R's functional nature to keep it simple!
+     ## General idea is that if you wish to apply a function recursively do not use the `classes` argument of `rapply`. Instead, make the classes check as a part of the function application!
+
+     ## NOTE (vijay): If you decide to use `ifelse` instead of `if` ... just be careful!
+     str(Xi <- rapply(X, function(n) ifelse(is.numeric(n),sqrt(n),identity(n)), how="replace")) ## Incorrect ... check out the element Xi[["e"]]!
+     str(Xc <- rapply(X, function(n) ifelse(is.numeric(n),sqrt,identity)(n), how="replace"))    ## Correct ... contrast Xc$e with Xi[["e"]]
+
+     ## TODO (vijay): Try to understand the behavior of `ifelse`!
+     ```
+
