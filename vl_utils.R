@@ -633,3 +633,47 @@ histospark <- function(x, width=10L) {
   factor <- cut(bins$counts / max(bins$counts), breaks=seq(0L,1L,length=length(sparks)+1L),labels=sparks,include.lowest=TRUE)
   paste0(factor,collapse="")
 }
+
+
+getAllObjects <- function() {
+  ## This can be used to determine where the object is coming from...
+  ##
+  ## I stumbled upon this when trying to figure out how to get `colSums` to work with `integer64`. I learned that `colSums` is definedin `package:Matrix` as well as `package:base`.
+  ## This is also evident when you do `?colSums` where R will ask you which function documentation you wish to read.
+  envs <- search()
+  getObjects <- function(env) {
+    objs <- ls(name=env)
+    searchIdx <- which(env==search())
+    data.table(searchidx=searchIdx,env=env,obj=objs,obj_type=sapply(objs,function(s)typeof(get(s,env))))
+  }
+  rbindlist(lapply(envs,getObjects))
+}
+
+binned_mean <- function(x) {
+  ## Based on the great idea from https://www.pymc-labs.com/blog-posts/bayesian-inference-at-scale-running-ab-tests-with-millions-of-observations/
+  ## R> y <- rnorm(10e6, mean=100L, sd=20L)
+  ## R> yhist <- hist(y, breaks=20e3)
+  ## R> mean(y); sd(y)
+  ## R> binned_mean(y); binned_sd(y) ## ought to be similar
+  ## R> ## biggest benefit is the size of these vectors! This ought to enable doing bigger statistical tests...
+  ## R> as.numeric(object.size(yhist))/as.numeric(object.size(y))
+  stopifnot(class(x)=="histogram")
+  n <- sum(x$counts)
+  mu <- sum(x$mids * x$counts)/n
+  mu
+}
+
+binned_sd <- function(x) {
+  ## Based on the great idea from https://www.pymc-labs.com/blog-posts/bayesian-inference-at-scale-running-ab-tests-with-millions-of-observations/
+  ## R> y <- rnorm(10e6, mean=100L, sd=20L)
+  ## R> yhist <- hist(y, breaks=20e3)
+  ## R> mean(y); sd(y)
+  ## R> binned_mean(y); binned_sd(y) ## ought to be similar
+  ## R> ## biggest benefit is the size of these vectors! This ought to enable doing bigger statistical tests...
+  ## R> as.numeric(object.size(yhist))/as.numeric(object.size(y))
+  stopifnot(class(x)=="histogram")
+  n <- sum(x$counts)
+  mu <- sum(x$mids * x$counts)/n
+  binvar <- (sum(x$mids^2 * x$counts) - n*mu^2)/(n-1)
+  sqrt(binvar)
+}
