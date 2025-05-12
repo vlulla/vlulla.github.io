@@ -1788,3 +1788,29 @@ layout: default
      ## TODO (vijay): Try to understand the behavior of `ifelse`!
      ```
 
+110. I learned from https://www.pymc-labs.com/blog-posts/bayesian-inference-at-scale-running-ab-tests-with-millions-of-observations/ that binning can be helpful in scaling up bayesian statistics. And, this will require functions to calculate mean/sd of binned data. The below functions accomplish this:
+
+     ```R
+     binned_mean <- function(x) {
+       ## R> y <- rnorm(10e6, mean=100L, sd=20L)
+       ## R> yhist <- hist(y, breaks=20e3, plot=FALSE)
+       ## R> mean(y); mean(sd)
+       ## R> binned_mean(yhist); binned_sd(yhist)
+       stopifnot(class(x)=="histogram")
+       n <- sum(x$counts)
+       mu <- with(x, sum(mids*counts)/n)
+       mu
+     }
+
+     binned_sd <- function(x) {
+       ## R> y <- rnorm(10e6, mean=100L, sd=20L)
+       ## R> yhist <- hist(y, breaks=20e3, plot=FALSE)
+       ## R> mean(y); mean(sd)
+       ## R> binned_mean(yhist); binned_sd(yhist)
+       stopifnot(class(x)=="histogram")
+       n <- sum(x$counts)
+       mu <- with(x,sum(mids*counts)/n)
+       binvar <- with(x, (sum(mids^2 * counts) - n*mu^2)/(n-1))
+       sqrt(binvar)
+     }
+     ```
