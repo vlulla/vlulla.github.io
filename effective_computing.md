@@ -11,7 +11,7 @@ layout: default
 
 ## My preferences
 
-I use macbook for most of my work related stuff! I use Ubuntu linux
+I use macbook for most of my work related stuff! I use Debian linux
 and a macbook for most of my personal stuff.
 
 These are the software tools/packages (emphasized ones more frequently than alternatives) that I use most frequently:
@@ -20,7 +20,7 @@ These are the software tools/packages (emphasized ones more frequently than alte
 1. R [my R related notes](NOTES_R), **NumPy/SciPy**, J, Julia, and Factor.
 1. NetLogo, and GAMA.
 1. **Python**, OCaml, Haskell, Scala, Lua, CLisp, ruby, Clojure, and sometimes Perl.
-1. **Duckdb**, **Clickhouse**, PostgreSQL+PostGIS, SQLite, Spark-SQL.
+1. **Duckdb**, PostgreSQL+PostGIS, SQLite, Clickhouse, Spark-SQL.
 1. ENVI, ERDAS Imagine, MultiSpec, Maptitude, QGIS, and ArcGIS/ArcGIS Pro.
 1. JabRef, and ~~EndNote~~ **Zotero** (for bibliography management).
 1. **Markdown (pandoc)**, LaTeX (MikTeX), and MS Office whenever I cannot get away with it!
