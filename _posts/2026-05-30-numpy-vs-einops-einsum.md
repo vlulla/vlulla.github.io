@@ -31,7 +31,7 @@ Einops [`einops.einsum`](https://einops.rocks/api/einsum/)
 | Vector outer product                               | `np.einsum('i,j->ij', np.arange(2)+1, b)` | `eo.einsum(np.arange(2)+1, b, 'i, j -> i j')` |
 | Tensor contraction (einops shines here!)           | `np.einsum('ijk,jil->kl', a1, b1)`        | `eo.einsum(a1, b1, 'i j k, j i l -> k l')`    |
 
-## NOTES
+### NOTES
 
 - Even though `np.einsum` allows *implicit* mode I prefer using the *explicit* mode (triggered by the presence of `->` in the substring).  This makes it easy to make connection between numpy and einops.  Implicit mode rearranges the axes in output alphabetically which can be tricky to debug if you don't remember this reordering!
 - The two big differences betwen `eo.einsum` and `np.einsum` are:
