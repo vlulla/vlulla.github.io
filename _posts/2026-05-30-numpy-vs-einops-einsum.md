@@ -37,5 +37,6 @@ Einops [`einops.einsum`](https://einops.rocks/api/einsum/)
 - The two big differences betwen `eo.einsum` and `np.einsum` are:
   1. In einops the tensors/arrays come first and the subscript string notation for summation come at the end.  In numpy the subscript string notation comes first and then the tensors/arrays.
   2. Numpy's einsum does not allow spaces in the subscript string notation whereas einops allows it.  I find reading einops's subscript notation a little bit easier.
+- Since indices in Einops are space spearated you can use complete words for indices!
 - Einops has `reduce`, `rearrange`, and `repeat` which can be quite handy for neural network code...especially for the attention transformer architecture related code!
 - Explore `optimize` (optional argument) in `np.einsum` to eke out more performance gain.
