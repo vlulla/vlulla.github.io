@@ -27,7 +27,7 @@ Einops [`einops.einsum`](https://einops.rocks/api/einsum/)
 | Transpose a matrix                                 | `np.einsum('ij->ji', a)`                  | `eo.einsum(c, 'i j -> j i')`                  |
 | Vector inner product                               | `np.einsum('i,i->', b, b)`                | `eo.einsum(b, b, 'i,i ->')`                   |
 | Matrix vector multiplication                       | `np.einsum('ij,j->i', a, b)`              | `eo.einsum(a, b, 'i j,j -> i')`               |
-| Broadcasting and scalar multiplication             | `np.einsum('..., ...->...', 3, c)`        | `eo.einsum(c, 3, '..., ... -> ...)`           |
+| Broadcasting and scalar multiplication             | `np.einsum('..., ...->...', 3, c)`        | `eo.einsum(c, 3, '..., ... -> ...')`          |
 | Vector outer product                               | `np.einsum('i,j->ij', np.arange(2)+1, b)` | `eo.einsum(np.arange(2)+1, b, 'i, j -> i j')` |
 | Tensor contraction (einops shines here!)           | `np.einsum('ijk,jil->kl', a1, b1)`        | `eo.einsum(a1, b1, 'i j k, j i l -> k l')`    |
 
